@@ -1,0 +1,28 @@
+export const ROUTES = {
+  HOME: '/',
+  MOVIES: '/movies',
+  MOVIE_DETAIL: '/movies/:id',
+  THEATERS: '/theaters',
+  TICKET_PRICES: '/ticket-prices',
+  ABOUT: '/about',
+  POLICY: '/policy',
+  MY_BOOKINGS: '/my-bookings',
+  FOOD_PREVIEW: '/food-preview',
+  ARTICLES: '/articles',
+  ARTICLE_DETAIL: '/articles/:id',
+  PROFILE: '/profile',
+  LOGIN: '/login',
+  REGISTER: '/register',
+  FORGOT_PASSWORD: '/forgot-password',
+  RESET_PASSWORD: '/reset-password',
+  BOOKING: '/booking/:showtimeId',
+  PAYMENT: '/payment/:reservationId',
+  PAYMENT_RESULT: '/payment/result',
+  PAYMENT_STATUS: '/payment/status',
+  UNAUTHORIZED: '/401',
+  FORBIDDEN: '/403',
+  NOT_FOUND: '/404',
+  SERVER_ERROR: '/500',
+};
+
+export default ROUTES;

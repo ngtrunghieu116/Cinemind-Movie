@@ -1,0 +1,7 @@
+export const SHOWTIME_STATUS = {
+  AVAILABLE: 'AVAILABLE',
+  FULL: 'FULL',
+  CANCELLED: 'CANCELLED',
+};
+
+export default SHOWTIME_STATUS;

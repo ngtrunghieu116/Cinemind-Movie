@@ -1,0 +1,60 @@
+# ==========================================
+# CineMind Monorepo .gitignore
+# ==========================================
+
+# Git backup folders
+**/.git_old/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+
+# IDE & Editor Files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+
+# Node.js / Frontend
+**/node_modules/
+**/dist/
+**/build/
+**/.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+**/.env.local
+**/.env.*.local
+
+# Java / Maven Backend
+**/target/
+**/*.class
+**/*.jar
+**/*.war
+**/*.ear
+movie-reservation/uploads/
+
+# Python / Chatbot & Crawler
+**/__pycache__/
+**/*.py[cod]
+*$py.class
+**/.venv/
+**/venv/
+**/env/
+**/*.egg-info/
+**/.pytest_cache/
+
+# Environment Variables & Secrets
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs
+**/*.log
+logs/

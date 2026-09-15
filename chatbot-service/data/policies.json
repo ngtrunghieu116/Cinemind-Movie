@@ -1,0 +1,38 @@
+[
+  {
+    "id": "faq_cancellation_policy",
+    "title": "Chính sách hủy vé và hoàn tiền rạp chiếu",
+    "type": "policy",
+    "content": "Chính sách hủy vé: Khách hàng có thể hủy đơn đặt vé ở trạng thái 'PENDING' (đang chờ thanh toán trong vòng 10 phút) bất kỳ lúc nào mà không phát sinh chi phí, ghế sẽ lập tức được giải phóng về trạng thái khả dụng (AVAILABLE). Đối với vé đã thanh toán thành công (CONFIRMED), khách hàng cần liên hệ trực tiếp quầy vé hoặc hotline chăm sóc khách hàng trước giờ chiếu tối thiểu 60 phút để được hỗ trợ theo quy định hoàn vé hoặc đổi sang suất chiếu khác."
+  },
+  {
+    "id": "faq_age_ratings",
+    "title": "Quy định phân loại độ tuổi xem phim điện ảnh",
+    "type": "policy",
+    "content": "Phân loại độ tuổi khán giả tại rạp: P: Phim phổ biến, được phép phổ biến đến mọi đối tượng khán giả. K: Phim được phép phổ biến đến khán giả dưới 13 tuổi với điều kiện có cha, mẹ hoặc người giám hộ đi cùng. T13: Phim cấm khán giả dưới 13 tuổi. T16: Phim cấm khán giả dưới 16 tuổi. T18: Phim cấm khán giả dưới 18 tuổi. C: Phim cấm phổ biến. Khán giả cần xuất trình giấy tờ tùy thân (CCCD, thẻ học sinh/sinh viên) khi vào rạp xem phim có giới hạn độ tuổi."
+  },
+  {
+    "id": "faq_combos_and_foods",
+    "title": "Quy định về đồ ăn và thức uống F&B tại rạp",
+    "type": "policy",
+    "content": "Rạp cung cấp các combo bắp rang bơ thơm ngon (vị phô mai, caramel, truyền thống) và các loại nước ngọt có gas, nước khoáng. Khách hàng không được mang đồ ăn có mùi nồng, thức ăn nhanh mua ngoài, kẹo cao su hoặc nước uống có cồn từ bên ngoài vào phòng chiếu phim nhằm giữ vệ sinh và không gian chung."
+  },
+  {
+    "id": "faq_ticket_promotions_u22",
+    "title": "Chính sách ưu đãi thành viên U22 và Học sinh Sinh viên",
+    "type": "policy",
+    "content": "Ưu đãi thành viên U22 và Học sinh - Sinh viên: Áp dụng giá vé đồng giá ưu đãi (55.000đ/vé 2D từ thứ 2 đến thứ 6) cho khách hàng từ 22 tuổi trở xuống hoặc xuất trình thẻ Học sinh/Sinh viên còn hiệu lực tại quầy vé. Mỗi thẻ áp dụng cho 01 vé mỗi ngày. Không áp dụng đồng thời với các chương trình khuyến mãi khác hoặc các suất chiếu đặc biệt."
+  },
+  {
+    "id": "faq_late_arrival_and_cinema_rules",
+    "title": "Quy định khi vào phòng chiếu và văn hóa xem phim",
+    "type": "policy",
+    "content": "Quy định trong phòng chiếu: Khán giả vui lòng có mặt trước giờ chiếu 10-15 phút để làm thủ tục soát vé và ổn định chỗ ngồi. Trường hợp đến muộn sau khi phim đã bắt đầu quá 20 phút, rạp sẽ hỗ trợ hướng dẫn vào chỗ ngồi nhưng khuyến khích chọn suất chiếu kế tiếp để có trải nghiệm tốt nhất. Nghiêm cấm hành vi quay phim, chụp ảnh, livestream hoặc ghi âm dưới mọi hình thức (vi phạm bản quyền). Vui lòng chuyển điện thoại sang chế độ rung hoặc im lặng và giữ trật tự."
+  },
+  {
+    "id": "faq_vat_invoice",
+    "title": "Quy định xuất hóa đơn điện tử VAT cho vé xem phim",
+    "type": "policy",
+    "content": "Chính sách xuất hóa đơn GTGT (VAT): Khách hàng có nhu cầu xuất hóa đơn điện tử VAT cho đơn đặt vé hoặc bắp nước vui lòng cung cấp thông tin xuất hóa đơn (Tên công ty, Mã số thuế, Địa chỉ, Email nhận hóa đơn) tại quầy vé hoặc gửi yêu cầu hỗ trợ qua hệ thống trong vòng 24 giờ kể từ thời điểm giao dịch thành công."
+  }
+]
