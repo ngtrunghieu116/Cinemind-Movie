@@ -25,6 +25,8 @@ services:
     container_name: cinemind-chatbot
     ports:
       - "8001:8001"
+    env_file:
+      - ./chatbot-service/.env
     environment:
       - CLOUD_MODEL_NAME=deepseek-chat
       - CLOUD_MODEL_URL=https://api.deepseek.com
