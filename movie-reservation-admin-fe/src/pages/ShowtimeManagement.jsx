@@ -33,9 +33,9 @@ const ShowtimeManagement = () => {
   const [crawling, setCrawling] = useState(false);
 
   // Filters
-  const [filterTheater, setFilterTheater] = useState('');
-  const [filterRoom, setFilterRoom] = useState('');
-  const [filterMovie, setFilterMovie] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
   const [filterDate, setFilterDate] = useState('');
 
   // Pagination
@@ -66,19 +66,18 @@ const ShowtimeManagement = () => {
     loadInitialData();
   }, []);
 
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+      setPage(0);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
   useEffect(() => {
     fetchShowtimes();
-  }, [filterTheater, filterRoom, filterMovie, filterDate, page, pageSize]);
-
-  // When filter theater changes, fetch rooms for filter
-  useEffect(() => {
-    setFilterRoom('');
-    if (filterTheater) {
-      fetchRoomsByTheater(filterTheater, setRooms);
-    } else {
-      setRooms([]);
-    }
-  }, [filterTheater]);
+  }, [debouncedSearch, filterStatus, filterDate, page, pageSize]);
 
   // When modal theater changes, fetch rooms for modal
   useEffect(() => {
@@ -148,9 +147,8 @@ const ShowtimeManagement = () => {
     setFetchError(false);
     try {
       const params = { page, size: pageSize };
-      if (filterTheater) params.theaterId = filterTheater;
-      if (filterRoom) params.roomId = filterRoom;
-      if (filterMovie) params.movieId = filterMovie;
+      if (debouncedSearch.trim()) params.search = debouncedSearch.trim();
+      if (filterStatus) params.status = filterStatus;
       if (filterDate) {
         params.fromDate = `${filterDate}T00:00:00`;
         params.toDate = `${filterDate}T23:59:59`;
@@ -250,9 +248,9 @@ const ShowtimeManagement = () => {
   };
 
   const handleClearFilters = () => {
-    setFilterTheater('');
-    setFilterRoom('');
-    setFilterMovie('');
+    setSearchTerm('');
+    setDebouncedSearch('');
+    setFilterStatus('');
     setFilterDate('');
     setPage(0);
   };
@@ -275,112 +273,68 @@ const ShowtimeManagement = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fadeIn pb-10">
       {/* Header Banner Section */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-xs border border-gray-100">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-gray-800">
             Quản Lý Lịch Chiếu
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Quản lý lịch chiếu phim, thời gian chiếu và giá vé theo từng cơ sở rạp
-          </p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={handleCrawlShowtimes}
             disabled={crawling}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all shadow-sm active:scale-95 disabled:opacity-50"
+            className="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-xs cursor-pointer disabled:opacity-50"
           >
-            <RotateCcw size={18} className={crawling ? "animate-spin" : ""} />
-            {crawling ? 'Đang cào...' : 'Crawl Suất Chiếu NCC'}
+            <RotateCcw size={16} className={crawling ? "animate-spin" : ""} />
+            <span>{crawling ? 'Đang cào...' : 'Crawl Suất Chiếu NCC'}</span>
           </button>
           <button
             onClick={() => handleOpenModal()}
-            className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all shadow-sm active:scale-95"
+            className="bg-red-600 hover:bg-red-700 active:scale-95 text-white font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-xs cursor-pointer"
           >
-            <Plus size={18} /> Thêm Suất Chiếu
+            <Plus size={18} /> <span>Thêm Suất Chiếu</span>
           </button>
         </div>
       </div>
 
       {/* Filter Section */}
-      <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-wrap gap-4 items-end">
-        <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider w-full mb-1">
-          <Filter size={14} /> Bộ Lọc Tìm Kiếm
+      <div className="bg-white p-5 rounded-2xl shadow-xs border border-gray-100 flex flex-wrap gap-3.5 items-center">
+        {/* Search Movie */}
+        <div className="relative flex-1 min-w-[260px]">
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Tìm kiếm theo tên phim..."
+            className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 focus:bg-white transition-all"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
 
-        {/* Filter Theater */}
-        <div className="flex-1 min-w-[200px]">
-          <label className="block text-xs font-semibold text-gray-600 mb-1.5">
-            Cơ sở Rạp
-          </label>
+        {/* Filter Status */}
+        <div className="min-w-[170px]">
           <select
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-white"
-            value={filterTheater}
+            className="w-full bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all font-medium cursor-pointer"
+            value={filterStatus}
             onChange={(e) => {
-              setFilterTheater(e.target.value);
+              setFilterStatus(e.target.value);
               setPage(0);
             }}
           >
-            <option value="">-- Tất cả cơ sở --</option>
-            {theaters.map(t => (
-              <option key={t.id} value={t.id}>{t.name}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Filter Room */}
-        <div className="flex-1 min-w-[180px]">
-          <label className="block text-xs font-semibold text-gray-600 mb-1.5">
-            Phòng chiếu
-          </label>
-          <select
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-white disabled:bg-gray-50 disabled:text-gray-400"
-            value={filterRoom}
-            onChange={(e) => {
-              setFilterRoom(e.target.value);
-              setPage(0);
-            }}
-            disabled={!filterTheater}
-          >
-            <option value="">-- Tất cả phòng --</option>
-            {rooms.map(r => (
-              <option key={r.id} value={r.id}>
-                {r.name} ({r.roomType})
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Filter Movie */}
-        <div className="flex-1 min-w-[220px]">
-          <label className="block text-xs font-semibold text-gray-600 mb-1.5">
-            Phim Chiếu
-          </label>
-          <select
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-white"
-            value={filterMovie}
-            onChange={(e) => {
-              setFilterMovie(e.target.value);
-              setPage(0);
-            }}
-          >
-            <option value="">-- Tất cả phim --</option>
-            {movies.map(m => (
-              <option key={m.id} value={m.id}>{m.title}</option>
-            ))}
+            <option value="">-- Tất cả trạng thái --</option>
+            <option value="UPCOMING">UPCOMING</option>
+            <option value="ONGOING">ONGOING</option>
+            <option value="ENDED">ENDED</option>
           </select>
         </div>
 
         {/* Filter Date */}
         <div className="min-w-[160px]">
-          <label className="block text-xs font-semibold text-gray-600 mb-1.5">
-            Ngày chiếu
-          </label>
           <input
             type="date"
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-white"
+            className="w-full bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all font-medium cursor-pointer"
             value={filterDate}
             onChange={(e) => {
               setFilterDate(e.target.value);
@@ -389,63 +343,53 @@ const ShowtimeManagement = () => {
           />
         </div>
 
-        {/* Clear Filters */}
-        {(filterTheater || filterRoom || filterMovie || filterDate) && (
-          <button
-            onClick={handleClearFilters}
-            className="px-3.5 py-2 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer"
-          >
-            <RotateCcw size={14} /> Xóa bộ lọc
-          </button>
-        )}
+        {/* Reset Filter Icon */}
+        <button
+          type="button"
+          onClick={handleClearFilters}
+          disabled={!searchTerm && !filterStatus && !filterDate}
+          className="px-3.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+          title="Đặt lại bộ lọc"
+        >
+          <RotateCcw size={15} />
+          <span className="hidden sm:inline">Đặt lại</span>
+        </button>
       </div>
 
       {/* Main Table Card */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-xs border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  ID
-                </th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Phim
-                </th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Cơ Sở / Phòng
-                </th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Thời Gian Chiếu
-                </th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Giá Vé (STD / VIP / ĐÔI)
-                </th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Trạng Thái & Ghế
-                </th>
-                <th className="px-6 py-3.5 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Thao Tác
-                </th>
+              <tr className="bg-gray-50/80 border-b border-gray-200 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                <th className="px-5 py-3.5 text-center w-14">STT</th>
+                <th className="px-5 py-3.5">Phim</th>
+                <th className="px-5 py-3.5">Phòng</th>
+                <th className="px-5 py-3.5 text-center">Ngày chiếu</th>
+                <th className="px-5 py-3.5 text-center">Bắt đầu</th>
+                <th className="px-5 py-3.5 text-center">Kết thúc</th>
+                <th className="px-5 py-3.5 text-center">Trạng thái</th>
+                <th className="px-5 py-3.5 text-center">Ghế trống</th>
+                <th className="px-5 py-3.5 text-right">Thao tác</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 text-sm">
               {loading ? (
                 <tr>
-                  <td colSpan="7" className="text-center py-10 text-gray-500 font-medium">
+                  <td colSpan="9" className="text-center py-10 text-gray-500 font-medium">
                     <div className="flex items-center justify-center gap-2">
-                      <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                      <div className="w-5 h-5 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
                       Đang tải danh sách suất chiếu...
                     </div>
                   </td>
                 </tr>
               ) : fetchError ? (
                 <tr>
-                  <td colSpan="7" className="text-center py-10">
+                  <td colSpan="9" className="text-center py-10">
                     <p className="text-red-500 font-medium mb-2">Không thể lấy dữ liệu suất chiếu</p>
                     <button
                       onClick={fetchShowtimes}
-                      className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition-all font-medium text-xs"
+                      className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded-xl hover:bg-red-100 transition-all font-medium text-xs cursor-pointer"
                     >
                       Thử lại
                     </button>
@@ -453,94 +397,62 @@ const ShowtimeManagement = () => {
                 </tr>
               ) : showtimes.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="text-center py-12 text-gray-400">
-                    <div className="flex flex-col items-center justify-center gap-2">
-                      <Calendar className="w-10 h-10 text-gray-300 stroke-1" />
-                      <p className="text-sm font-medium">Không tìm thấy suất chiếu nào phù hợp</p>
-                    </div>
+                  <td colSpan="9" className="text-center py-12 text-gray-400 font-medium">
+                    Không tìm thấy suất chiếu nào phù hợp.
                   </td>
                 </tr>
               ) : (
-                showtimes.map((st) => (
-                  <tr key={st.id} className="hover:bg-blue-50/30 transition-colors duration-150">
-                    <td className="px-6 py-4 font-semibold text-gray-400 text-xs">
-                      #{st.id}
+                showtimes.map((st, idx) => (
+                  <tr key={st.id} className="hover:bg-gray-50/50 transition-colors text-sm">
+                    <td className="px-5 py-3.5 text-center text-gray-500 font-medium">
+                      {page * pageSize + idx + 1}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="font-semibold text-gray-800">{st.movieTitle}</div>
-                      <div className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
-                        <Clock size={12} /> {st.movieDuration} phút
-                      </div>
+                    <td className="px-5 py-3.5 font-medium text-gray-800">
+                      {st.movieTitle}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="font-medium text-gray-800 text-xs flex items-center gap-1">
-                        <Building2 size={13} className="text-gray-400" /> {st.theaterName}
-                      </div>
-                      <div className="mt-1">
-                        <span className="inline-block px-2 py-0.5 text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 rounded">
-                          {st.roomName}
-                        </span>
-                      </div>
+                    <td className="px-5 py-3.5 text-gray-800">
+                      {st.roomName}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-bold text-blue-600 flex items-center gap-1">
-                        <Calendar size={13} /> {format(new Date(st.startTime), 'HH:mm - dd/MM/yyyy')}
-                      </div>
-                      <div className="text-xs text-gray-400 mt-0.5">
-                        Kết thúc: {format(new Date(st.endTime), 'HH:mm')}
-                      </div>
+                    <td className="px-5 py-3.5 text-center text-gray-800">
+                      {st.startTime ? format(new Date(st.startTime), 'dd/MM/yyyy') : '-'}
                     </td>
-                    <td className="px-6 py-4 text-xs font-medium text-gray-700">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-gray-400">Thường:</span>
-                        <span className="font-semibold text-gray-900">{st.priceStandard?.toLocaleString()}đ</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="text-amber-600 font-medium">VIP:</span>
-                        <span className="font-semibold text-amber-700">{st.priceVip?.toLocaleString()}đ</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="text-rose-600 font-medium">Đôi:</span>
-                        <span className="font-semibold text-rose-700">{st.priceCouple?.toLocaleString()}đ</span>
-                      </div>
+                    <td className="px-5 py-3.5 text-center text-gray-800">
+                      {st.startTime ? format(new Date(st.startTime), 'HH:mm') : '-'}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`px-2.5 py-1 text-xs font-bold rounded-full border ${
-                            st.status === 'AVAILABLE'
-                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                              : st.status === 'SOLD_OUT'
-                              ? 'bg-red-50 text-red-700 border-red-200'
-                              : 'bg-gray-100 text-gray-600 border-gray-200'
-                          }`}
-                        >
-                          {st.status === 'AVAILABLE'
-                            ? '● Còn chỗ'
-                            : st.status === 'SOLD_OUT'
-                            ? '● Hết vé'
-                            : '● Đã chiếu'}
-                        </span>
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1.5">
-                        Trống: <strong className="text-gray-800">{st.availableSeats}</strong> / {st.availableSeats + st.bookedSeats} ghế
-                      </div>
+                    <td className="px-5 py-3.5 text-center text-gray-800">
+                      {st.endTime ? format(new Date(st.endTime), 'HH:mm') : '-'}
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-1">
+                    <td className="px-5 py-3.5 text-center">
+                      <span
+                        className={`inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full border ${
+                          st.status === 'UPCOMING'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            : st.status === 'ONGOING'
+                            ? 'bg-amber-50 text-amber-700 border-amber-200'
+                            : 'bg-gray-100 text-gray-600 border-gray-200'
+                        }`}
+                      >
+                        {st.status || 'UPCOMING'}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-center text-gray-800">
+                      <span className="font-semibold text-gray-800">{st.availableSeats ?? 0}</span>
+                      <span className="text-gray-400">/{(st.availableSeats ?? 0) + (st.bookedSeats ?? 0)}</span>
+                    </td>
+                    <td className="px-5 py-3.5 text-right whitespace-nowrap">
+                      <div className="flex items-center justify-end gap-1.5 text-xs font-medium">
                         <button
                           onClick={() => handleOpenModal(st)}
-                          className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-all cursor-pointer"
-                          title="Chỉnh sửa"
+                          className="text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
                         >
-                          <Edit size={16} />
+                          Sửa
                         </button>
+                        <span className="text-gray-300">·</span>
                         <button
                           onClick={() => handleDelete(st.id)}
-                          className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-all cursor-pointer"
-                          title="Xóa"
+                          className="text-red-600 hover:text-red-800 transition-colors cursor-pointer"
                         >
-                          <Trash2 size={16} />
+                          Xóa
                         </button>
                       </div>
                     </td>
@@ -550,20 +462,24 @@ const ShowtimeManagement = () => {
             </tbody>
           </table>
         </div>
-
-        {/* Standardized Pagination Component */}
-        <Pagination
-          pageNo={page}
-          pageSize={pageSize}
-          totalElements={totalElements}
-          totalPages={totalPages}
-          onPageChange={(newPage) => setPage(newPage)}
-          onPageSizeChange={(newSize) => {
-            setPageSize(newSize);
-            setPage(0);
-          }}
-        />
       </div>
+
+      {/* Standardized Pagination Component */}
+      {!loading && !fetchError && totalElements > 0 && (
+        <div className="bg-white p-4 rounded-2xl shadow-xs border border-gray-100">
+          <Pagination
+            pageNo={page}
+            pageSize={pageSize}
+            totalElements={totalElements}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setPage(0);
+            }}
+          />
+        </div>
+      )}
 
       {/* Modal Form */}
       {isModalOpen && (

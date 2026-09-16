@@ -135,26 +135,24 @@ const TheaterManagement = () => {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 animate-fadeIn pb-10">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-xs border border-gray-100">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                        Quản Lý Cơ Sở Rạp
-                    </h1>
+                    <h1 className="text-2xl font-bold text-gray-800">Quản Lý Cơ Sở Rạp</h1>
                 </div>
                 <button
                     onClick={() => handleOpenModal()}
-                    className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all shadow-sm active:scale-95"
+                    className="bg-red-600 hover:bg-red-700 active:scale-95 text-white font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-xs cursor-pointer"
                 >
-                    <Plus size={18} /> Thêm Cơ Sở Mới
+                    <Plus size={18} /> <span>Thêm Cơ Sở Mới</span>
                 </button>
             </div>
 
             {/* Filter & Search Bar */}
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
+            <div className="bg-white p-5 rounded-2xl shadow-xs border border-gray-100 flex justify-between items-center">
                 <div className="relative w-full max-w-sm">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <input
                         type="text"
                         placeholder="Tìm kiếm tên cơ sở, địa chỉ, thành phố..."
@@ -163,126 +161,129 @@ const TheaterManagement = () => {
                             setSearch(e.target.value);
                             setPageNo(0);
                         }}
-                        className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                        className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 focus:bg-white transition-all"
                     />
                 </div>
             </div>
 
             {/* Table */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                {error && <div className="bg-red-50 text-red-600 p-4 m-4 rounded-lg text-sm">{error}</div>}
+            <div className="bg-white rounded-2xl shadow-xs border border-gray-100 overflow-hidden">
+                {error && <div className="bg-red-50 text-red-600 p-4 m-4 rounded-xl text-sm">{error}</div>}
 
                 {loading ? (
                     <div className="flex justify-center items-center py-16">
-                        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+                        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-600"></div>
                     </div>
                 ) : (
-                    <>
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left border-collapse">
-                                <thead>
-                                    <tr className="bg-gray-50/80 border-b border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        <th className="px-6 py-4">ID</th>
-                                        <th className="px-6 py-4">Tên Cơ Sở Rạp</th>
-                                        <th className="px-6 py-4">Địa Chỉ</th>
-                                        <th className="px-6 py-4">Khu Vực</th>
-                                        <th className="px-6 py-4">Liên Hệ</th>
-                                        <th className="px-6 py-4">Trạng Thái</th>
-                                        <th className="px-6 py-4 text-right">Thao Tác</th>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                            <thead>
+                                <tr className="bg-gray-50/80 border-b border-gray-200 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                                    <th className="px-5 py-3.5">ID</th>
+                                    <th className="px-5 py-3.5">Tên Cơ Sở Rạp</th>
+                                    <th className="px-5 py-3.5">Địa Chỉ</th>
+                                    <th className="px-5 py-3.5">Khu Vực</th>
+                                    <th className="px-5 py-3.5">Liên Hệ</th>
+                                    <th className="px-5 py-3.5">Trạng Thái</th>
+                                    <th className="px-5 py-3.5 text-right">Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100 text-sm">
+                                {theaters.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="7" className="text-center py-12 text-gray-400 font-medium">
+                                            Không tìm thấy cơ sở rạp nào phù hợp.
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-100 text-sm">
-                                    {theaters.length === 0 ? (
-                                        <tr>
-                                            <td colSpan="7" className="text-center py-12 text-gray-400">
-                                                Không tìm thấy cơ sở rạp nào phù hợp.
+                                ) : (
+                                    theaters.map((t) => (
+                                        <tr key={t.id} className="hover:bg-gray-50/50 transition-colors">
+                                            <td className="px-5 py-3.5 font-semibold text-gray-500">{t.id}</td>
+                                            <td className="px-5 py-3.5">
+                                                <div className="font-semibold text-gray-900">{t.name}</div>
                                             </td>
-                                        </tr>
-                                    ) : (
-                                        theaters.map((t) => (
-                                            <tr key={t.id} className="hover:bg-blue-50/30 transition-colors">
-                                                <td className="px-6 py-4 font-semibold text-gray-500">{t.id}</td>
-                                                <td className="px-6 py-4">
-                                                    <div className="font-semibold text-gray-900">{t.name}</div>
-                                                </td>
-                                                <td className="px-6 py-4 text-gray-700">
-                                                    <div className="flex items-center gap-1.5">
-                                                        <MapPin size={14} className="text-gray-400 shrink-0" />
-                                                        {t.address}
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4 text-gray-700 font-medium">
-                                                    {t.district}, {t.city}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <div className="flex flex-col text-xs space-y-1">
-                                                        <span className="flex items-center gap-1 text-gray-700 font-medium">
-                                                            <Phone size={12} className="text-gray-400" /> {t.phone}
-                                                        </span>
-                                                        {t.email && (
-                                                            <span className="flex items-center gap-1 text-gray-500">
-                                                                <Mail size={12} className="text-gray-400" /> {t.email}
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    {t.isActive ? (
-                                                        <span className="inline-flex items-center whitespace-nowrap shrink-0 bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-200">
-                                                            Hoạt động
-                                                        </span>
-                                                    ) : (
-                                                        <span className="inline-flex items-center whitespace-nowrap shrink-0 bg-gray-100 text-gray-600 text-xs font-semibold px-2.5 py-1 rounded-full border border-gray-200">
-                                                            Tạm dừng
+                                            <td className="px-5 py-3.5 text-gray-700">
+                                                <div className="flex items-center gap-1.5">
+                                                    <MapPin size={14} className="text-gray-400 shrink-0" />
+                                                    {t.address}
+                                                </div>
+                                            </td>
+                                            <td className="px-5 py-3.5 text-gray-700 font-medium">
+                                                {t.district}, {t.city}
+                                            </td>
+                                            <td className="px-5 py-3.5">
+                                                <div className="flex flex-col text-xs space-y-1">
+                                                    <span className="flex items-center gap-1 text-gray-700 font-medium">
+                                                        <Phone size={12} className="text-gray-400" /> {t.phone}
+                                                    </span>
+                                                    {t.email && (
+                                                        <span className="flex items-center gap-1 text-gray-500">
+                                                            <Mail size={12} className="text-gray-400" /> {t.email}
                                                         </span>
                                                     )}
-                                                </td>
-                                                <td className="px-6 py-4 text-right">
-                                                    <div className="flex items-center justify-end gap-2">
-                                                        <button
-                                                            onClick={() => setSelectedTheaterForRooms(t)}
-                                                            className="text-indigo-600 hover:text-indigo-800 p-1.5 rounded-lg hover:bg-indigo-50 transition-colors"
-                                                            title="Quản lý phòng chiếu"
-                                                        >
-                                                            <DoorClosed size={18} />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleOpenModal(t)}
-                                                            className="text-blue-600 hover:text-blue-800 p-1.5 rounded-lg hover:bg-blue-50 transition-colors"
-                                                            title="Sửa cơ sở"
-                                                        >
-                                                            <Edit size={18} />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDelete(t.id, t.name)}
-                                                            className="text-red-500 hover:text-red-700 p-1.5 rounded-lg hover:bg-red-50 transition-colors"
-                                                            title="Xóa cơ sở"
-                                                        >
-                                                            <Trash2 size={18} />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <Pagination
-                            pageNo={pageNo}
-                            pageSize={pageSize}
-                            totalElements={totalElements}
-                            totalPages={totalPages}
-                            onPageChange={(newPage) => setPageNo(newPage)}
-                            onPageSizeChange={(newSize) => {
-                                setPageSize(newSize);
-                                setPageNo(0);
-                            }}
-                        />
-                    </>
+                                                </div>
+                                            </td>
+                                            <td className="px-5 py-3.5">
+                                                {t.isActive ? (
+                                                    <span className="inline-flex items-center whitespace-nowrap shrink-0 bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-200">
+                                                        Hoạt động
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-flex items-center whitespace-nowrap shrink-0 bg-gray-100 text-gray-600 text-xs font-semibold px-2.5 py-1 rounded-full border border-gray-200">
+                                                        Tạm dừng
+                                                    </span>
+                                                )}
+                                            </td>
+                                            <td className="px-5 py-3.5 text-right">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <button
+                                                        onClick={() => setSelectedTheaterForRooms(t)}
+                                                        className="text-indigo-600 hover:text-indigo-800 p-1.5 rounded-lg hover:bg-indigo-50 transition-colors cursor-pointer"
+                                                        title="Quản lý phòng chiếu"
+                                                    >
+                                                        <DoorClosed size={18} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleOpenModal(t)}
+                                                        className="text-blue-600 hover:text-blue-800 p-1.5 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer"
+                                                        title="Sửa cơ sở"
+                                                    >
+                                                        <Edit size={18} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(t.id, t.name)}
+                                                        className="text-red-500 hover:text-red-700 p-1.5 rounded-lg hover:bg-red-50 transition-colors cursor-pointer"
+                                                        title="Xóa cơ sở"
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
             </div>
+
+            {/* Server-side Pagination */}
+            {!loading && !error && totalElements > 0 && (
+                <div className="bg-white p-4 rounded-2xl shadow-xs border border-gray-100">
+                    <Pagination
+                        pageNo={pageNo}
+                        pageSize={pageSize}
+                        totalElements={totalElements}
+                        totalPages={totalPages}
+                        onPageChange={(newPage) => setPageNo(newPage)}
+                        onPageSizeChange={(newSize) => {
+                            setPageSize(newSize);
+                            setPageNo(0);
+                        }}
+                    />
+                </div>
+            )}
 
             {/* Modal Add/Edit */}
             {isModalOpen && (

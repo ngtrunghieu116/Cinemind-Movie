@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class SecurityUtils {
 
@@ -31,5 +33,18 @@ public class SecurityUtils {
         String email = auth.getName();
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin tài khoản người dùng"));
+    }
+
+    /**
+     * Resolves the current authenticated user from SecurityContext if available.
+     * Returns Optional.empty() if unauthenticated or anonymous.
+     */
+    public Optional<User> getCurrentUserOptional() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+            return Optional.empty();
+        }
+        String email = auth.getName();
+        return userRepository.findByEmail(email);
     }
 }

@@ -175,10 +175,10 @@ public class ShowtimeService implements IShowtimeService {
     @Override
     @Transactional(readOnly = true)
     public Page<AdminShowtimeResponse> searchShowtimes(Long theaterId, Long roomId, Long movieId,
-            LocalDateTime fromDate, LocalDateTime toDate, int page, int size) {
+            String search, String status, LocalDateTime fromDate, LocalDateTime toDate, int page, int size) {
         Long targetTheaterId = theaterId != null ? theaterId : primaryCinemaContext.getPrimaryTheaterId();
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "startTime"));
-        return showtimeRepository.searchShowtimes(targetTheaterId, roomId, movieId, fromDate, toDate, pageable)
+        return showtimeRepository.searchShowtimes(targetTheaterId, roomId, movieId, search, status, fromDate, toDate, LocalDateTime.now(), pageable)
                 .map(this::toAdminResponse);
     }
 
@@ -187,8 +187,8 @@ public class ShowtimeService implements IShowtimeService {
     public Page<PublicShowtimeResponse> searchPublicShowtimes(Long theaterId, Long roomId, Long movieId,
             LocalDateTime fromDate, LocalDateTime toDate, int page, int size) {
         Long targetTheaterId = theaterId != null ? theaterId : primaryCinemaContext.getPrimaryTheaterId();
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "startTime"));
-        return showtimeRepository.searchShowtimes(targetTheaterId, roomId, movieId, fromDate, toDate, pageable)
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "startTime"));
+        return showtimeRepository.searchPublicShowtimes(targetTheaterId, roomId, movieId, fromDate, toDate, LocalDateTime.now(), pageable)
                 .map(PublicShowtimeResponse::fromEntity);
     }
 

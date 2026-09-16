@@ -19,7 +19,7 @@ public class Reservation {
     @Column(name = "booking_code", unique = true, nullable = false, length = 50)
     private String bookingCode;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "showtime_id", nullable = false)

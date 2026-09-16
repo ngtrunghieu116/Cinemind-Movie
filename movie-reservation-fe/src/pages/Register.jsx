@@ -49,7 +49,7 @@ const Register = () => {
 
       setSuccess(responseMessage || 'Đăng ký tài khoản thành công!');
       setTimeout(() => {
-        navigate('/login');
+        navigate(location.search ? `/login${location.search}` : '/login');
       }, 2000);
     } catch (err) {
       setError(err.message || 'Đăng ký không thành công. Vui lòng kiểm tra lại!');
@@ -229,7 +229,7 @@ const Register = () => {
 
         <p className="mt-4 text-center text-sm text-slate-500">
           Đã có tài khoản?{' '}
-          <Link to="/login" className="font-semibold text-red-600 hover:text-red-700 transition">
+          <Link to={location.search ? `/login${location.search}` : '/login'} className="font-semibold text-red-600 hover:text-red-700 transition">
             Đăng nhập ngay
           </Link>
         </p>

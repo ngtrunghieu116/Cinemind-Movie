@@ -118,15 +118,9 @@ const BookingManagement = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-xs border border-gray-100">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2.5">
-                        <div className="w-9 h-9 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
-                            <Ticket size={22} />
-                        </div>
+                    <h1 className="text-2xl font-bold text-gray-800">
                         Quản Lý Đặt Vé
                     </h1>
-                    <p className="text-sm text-gray-500 mt-1">
-                        Quản lý, tra cứu và kiểm soát các giao dịch đặt vé của khách hàng.
-                    </p>
                 </div>
                 <button
                     type="button"

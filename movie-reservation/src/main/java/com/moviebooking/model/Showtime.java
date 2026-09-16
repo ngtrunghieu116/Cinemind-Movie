@@ -49,4 +49,18 @@ public class Showtime {
     @Column(name = "is_online_selling", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
     @Builder.Default
     private Boolean isOnlineSelling = true;
+
+    /**
+     * Thuộc tính miền xác định thời điểm kết thúc hiệu lực dựa trên thời lượng phim.
+     * Entity không chịu trách nhiệm đánh giá trạng thái nghiệp vụ (Tuân thủ SRP).
+     */
+    public LocalDateTime getEffectiveEndTime() {
+        if (this.endTime != null) {
+            return this.endTime;
+        }
+        int duration = (this.movie != null && this.movie.getDuration() != null)
+                ? this.movie.getDuration()
+                : 120;
+        return (this.startTime != null) ? this.startTime.plusMinutes(duration) : null;
+    }
 }

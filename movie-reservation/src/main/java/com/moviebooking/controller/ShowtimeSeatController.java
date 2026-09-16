@@ -23,14 +23,14 @@ public class ShowtimeSeatController {
 
     @PostMapping("/hold")
     public ResponseEntity<HoldSeatsResponse> holdSeats(@Valid @RequestBody HoldSeatsRequest request) {
-        User currentUser = securityUtils.getCurrentUser();
+        User currentUser = securityUtils.getCurrentUserOptional().orElse(null);
         HoldSeatsResponse response = showtimeSeatService.holdSeats(request, currentUser);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/release")
     public ResponseEntity<Map<String, String>> releaseSeats(@Valid @RequestBody ReleaseSeatsRequest request) {
-        User currentUser = securityUtils.getCurrentUser();
+        User currentUser = securityUtils.getCurrentUserOptional().orElse(null);
         showtimeSeatService.releaseSeats(request, currentUser);
         return ResponseEntity.ok(Map.of("message", "Giải phóng ghế thành công"));
     }

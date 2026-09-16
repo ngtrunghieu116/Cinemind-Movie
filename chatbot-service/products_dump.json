@@ -1,0 +1,170 @@
+[
+  {
+    "id": 1,
+    "name": "Combo Solo",
+    "category": "COMBO",
+    "price": 75000.0,
+    "description": "1 Bắp rang bơ ngọt lớn + 1 Nước ngọt Coca-Cola 32oz",
+    "is_active": true
+  },
+  {
+    "id": 2,
+    "name": "Combo Đôi (Couple)",
+    "category": "COMBO",
+    "price": 105000.0,
+    "description": "1 Bắp rang bơ lớn (tùy chọn vị) + 2 Nước ngọt Coca-Cola 32oz",
+    "is_active": true
+  },
+  {
+    "id": 3,
+    "name": "Combo Bạn Thân (Trio)",
+    "category": "COMBO",
+    "price": 149000.0,
+    "description": "2 Bắp rang bơ lớn + 3 Nước ngọt Coca-Cola 32oz",
+    "is_active": true
+  },
+  {
+    "id": 4,
+    "name": "Combo Gia Đình (Family)",
+    "category": "COMBO",
+    "price": 179000.0,
+    "description": "2 Bắp lớn + 4 Nước ngọt + 1 Khoai tây chiên lắc phô mai",
+    "is_active": true
+  },
+  {
+    "id": 5,
+    "name": "Combo VIP Snack & Film",
+    "category": "COMBO",
+    "price": 125000.0,
+    "description": "1 Bắp phô mai lớn + 2 Nước ngọt 32oz + 1 Xúc xích nướng phô mai",
+    "is_active": true
+  },
+  {
+    "id": 6,
+    "name": "Bắp Ngọt Truyền Thống (Size M)",
+    "category": "FOOD",
+    "price": 45000.0,
+    "description": "Bắp rang bơ vị ngọt truyền thống thơm giòn (Size vừa 24oz)",
+    "is_active": true
+  },
+  {
+    "id": 7,
+    "name": "Bắp Ngọt Truyền Thống (Size L)",
+    "category": "FOOD",
+    "price": 55000.0,
+    "description": "Bắp rang bơ vị ngọt truyền thống thơm giòn (Size lớn 32oz)",
+    "is_active": true
+  },
+  {
+    "id": 8,
+    "name": "Bắp Phô Mai (Size M)",
+    "category": "FOOD",
+    "price": 55000.0,
+    "description": "Bắp rang bơ lắc bột phô mai béo ngậy đậm vị (Size vừa 24oz)",
+    "is_active": true
+  },
+  {
+    "id": 9,
+    "name": "Bắp Phô Mai (Size L)",
+    "category": "FOOD",
+    "price": 65000.0,
+    "description": "Bắp rang bơ lắc bột phô mai béo ngậy đậm vị (Size lớn 32oz)",
+    "is_active": true
+  },
+  {
+    "id": 10,
+    "name": "Bắp Caramel (Size M)",
+    "category": "FOOD",
+    "price": 55000.0,
+    "description": "Bắp rang bơ sốt caramel ngọt bùi đậm đà (Size vừa 24oz)",
+    "is_active": true
+  },
+  {
+    "id": 11,
+    "name": "Bắp Caramel (Size L)",
+    "category": "FOOD",
+    "price": 65000.0,
+    "description": "Bắp rang bơ sốt caramel ngọt bùi đậm đà (Size lớn 32oz)",
+    "is_active": true
+  },
+  {
+    "id": 12,
+    "name": "Bắp Socola Đậm Vị (Size L)",
+    "category": "FOOD",
+    "price": 65000.0,
+    "description": "Bắp rang bơ phủ lớp socola thơm nồng hảo hạng (Size lớn 32oz)",
+    "is_active": true
+  },
+  {
+    "id": 13,
+    "name": "Khoai Tây Chiên Lắc Phô Mai",
+    "category": "FOOD",
+    "price": 45000.0,
+    "description": "Khoai tây chiên giòn rụm lắc gia vị phô mai cay nhẹ",
+    "is_active": true
+  },
+  {
+    "id": 14,
+    "name": "Xúc Xích Nướng Phô Mai",
+    "category": "FOOD",
+    "price": 40000.0,
+    "description": "Xúc xích Đức nướng nóng hổi sốt phô mai kéo sợi",
+    "is_active": true
+  },
+  {
+    "id": 15,
+    "name": "Coca-Cola (Size M 22oz)",
+    "category": "DRINK",
+    "price": 28000.0,
+    "description": "Nước ngọt Coca-Cola mát lạnh sảng khoái (Size vừa 22oz)",
+    "is_active": true
+  },
+  {
+    "id": 16,
+    "name": "Coca-Cola (Size L 32oz)",
+    "category": "DRINK",
+    "price": 35000.0,
+    "description": "Nước ngọt Coca-Cola mát lạnh sảng khoái (Size lớn 32oz)",
+    "is_active": true
+  },
+  {
+    "id": 17,
+    "name": "Sprite Vị Chanh (Size L 32oz)",
+    "category": "DRINK",
+    "price": 35000.0,
+    "description": "Nước ngọt Sprite chanh sảng khoái thanh mát (Size lớn 32oz)",
+    "is_active": true
+  },
+  {
+    "id": 18,
+    "name": "Fanta Vị Cam (Size L 32oz)",
+    "category": "DRINK",
+    "price": 35000.0,
+    "description": "Nước có ga Fanta hương cam tươi mát (Size lớn 32oz)",
+    "is_active": true
+  },
+  {
+    "id": 19,
+    "name": "Trà Đào Cam Sả Rạp Phim",
+    "category": "DRINK",
+    "price": 45000.0,
+    "description": "Trà đào thanh mát kèm miếng đào giòn ngọt và hương sả tươi",
+    "is_active": true
+  },
+  {
+    "id": 20,
+    "name": "Trà Sữa Trân Châu Ô Long",
+    "category": "DRINK",
+    "price": 45000.0,
+    "description": "Trà sữa vị đậm ô long kèm trân châu hoàng kim dai giòn",
+    "is_active": true
+  },
+  {
+    "id": 21,
+    "name": "Nước Suối Dasani (500ml)",
+    "category": "DRINK",
+    "price": 20000.0,
+    "description": "Nước khoáng tinh khiết Dasani đóng chai tiện lợi",
+    "is_active": true
+  }
+]

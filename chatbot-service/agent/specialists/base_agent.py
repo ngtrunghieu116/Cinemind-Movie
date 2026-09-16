@@ -75,7 +75,8 @@ class SpecialistAgent:
         chat_history: List[Dict[str, Any]] = None,
         context_prompt: str = "",
         user_context: Optional[Dict[str, Any]] = None,
-        max_iterations: int = 5
+        max_iterations: int = 5,
+        parent_span: Any = None
     ) -> Dict[str, Any]:
         """Thực thi chu trình Agent: Prompt -> DeepSeek LLM -> Tool Calls -> Output."""
         if not self.client:
@@ -145,6 +146,16 @@ class SpecialistAgent:
 
                     logger.info(f"Agent {self.name} calling tool: {fn_name} with args: {fn_args}")
 
+                    # Monitor tool call via Langfuse Span
+                    tool_span = None
+                    if parent_span and hasattr(parent_span, "span"):
+                        tool_span = parent_span.span(
+                            name=f"tool_{fn_name}",
+                            as_type="tool",
+                            input=fn_args,
+                            metadata={"agent": self.name, "tool_name": fn_name, "call_id": tc.id}
+                        )
+
                     tool_fn = self.tool_map.get(fn_name)
                     if tool_fn:
                         try:
@@ -153,6 +164,10 @@ class SpecialistAgent:
                             result = {"error": f"Lỗi thực thi tool {fn_name}: {str(ex)}"}
                     else:
                         result = {"error": f"Tool {fn_name} không thuộc quyền hạn của agent {self.name}"}
+
+                    # Ghi nhận kết quả tool trả về vào Langfuse Span
+                    if tool_span:
+                        tool_span.end(output=result)
 
                     tool_calls_executed.append({
                         "tool": fn_name,

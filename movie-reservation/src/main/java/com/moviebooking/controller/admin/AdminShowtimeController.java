@@ -49,11 +49,13 @@ public class AdminShowtimeController {
             @RequestParam(required = false) Long theaterId,
             @RequestParam(required = false) Long roomId,
             @RequestParam(required = false) Long movieId,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String status,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDate,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity
-                .ok(showtimeService.searchShowtimes(theaterId, roomId, movieId, fromDate, toDate, page, size));
+                .ok(showtimeService.searchShowtimes(theaterId, roomId, movieId, search, status, fromDate, toDate, page, size));
     }
 }

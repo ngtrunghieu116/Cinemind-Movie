@@ -1,6 +1,7 @@
 package com.moviebooking.dto.res;
 
 import com.moviebooking.model.Showtime;
+import com.moviebooking.model.enums.ShowtimeStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -33,17 +34,14 @@ public class AdminShowtimeResponse {
     // Admin specific data
     private Long bookedSeats;
     private Long availableSeats;
-    private String status; // "AVAILABLE", "SOLD_OUT", "PAST"
+    private String status; // "UPCOMING", "ONGOING", "ENDED"
 
     public static AdminShowtimeResponse fromEntity(Showtime showtime, long bookedSeats, long availableSeats) {
-        String status;
-        if (LocalDateTime.now().isAfter(showtime.getStartTime())) {
-            status = "PAST";
-        } else if (availableSeats <= 0) {
-            status = "SOLD_OUT";
-        } else {
-            status = "AVAILABLE";
-        }
+        String status = ShowtimeStatus.resolve(
+                showtime.getStartTime(),
+                showtime.getEffectiveEndTime(),
+                LocalDateTime.now()
+        ).name();
 
         return AdminShowtimeResponse.builder()
                 .id(showtime.getId())

@@ -33,7 +33,7 @@ const Pagination = ({
     };
 
     return (
-        <div className="px-6 py-4 bg-white border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-600">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-600 w-full">
             {/* Info Summary */}
             <div className="flex items-center gap-4">
                 <span>
@@ -46,7 +46,7 @@ const Pagination = ({
                         <select
                             value={pageSize}
                             onChange={(e) => onPageSizeChange(Number(e.target.value))}
-                            className="bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-md px-2 py-1 focus:ring-2 focus:ring-blue-500 outline-none"
+                            className="bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-lg px-2 py-1 focus:ring-2 focus:ring-red-500/20 focus:border-red-500 outline-none cursor-pointer"
                         >
                             <option value={5}>5 / trang</option>
                             <option value={10}>10 / trang</option>
@@ -63,7 +63,7 @@ const Pagination = ({
                 <button
                     onClick={() => onPageChange(pageNo - 1)}
                     disabled={pageNo === 0}
-                    className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-600 disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all"
+                    className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-600 disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all cursor-pointer"
                     title="Trang trước"
                 >
                     <ChevronLeft size={16} />
@@ -74,9 +74,9 @@ const Pagination = ({
                     <button
                         key={p}
                         onClick={() => onPageChange(p)}
-                        className={`min-w-[32px] h-8 px-2.5 rounded-lg text-xs font-semibold transition-all ${
+                        className={`min-w-[32px] h-8 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                             p === pageNo
-                                ? 'bg-blue-600 text-white shadow-xs'
+                                ? 'bg-red-600 text-white shadow-xs'
                                 : 'border border-gray-200 text-gray-700 hover:bg-gray-50'
                         }`}
                     >
@@ -88,7 +88,7 @@ const Pagination = ({
                 <button
                     onClick={() => onPageChange(pageNo + 1)}
                     disabled={pageNo >= totalPages - 1}
-                    className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-600 disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all"
+                    className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-600 disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all cursor-pointer"
                     title="Trang tiếp"
                 >
                     <ChevronRight size={16} />

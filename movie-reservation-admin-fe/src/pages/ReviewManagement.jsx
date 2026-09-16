@@ -171,42 +171,49 @@ const ReviewManagement = () => {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 animate-fadeIn pb-10">
             {/* Header */}
-            <div className="bg-white p-6 rounded-2xl shadow-xs border border-slate-200">
-                <h1 className="text-2xl font-black text-slate-800 flex items-center gap-2.5">
-                    <MessageSquare className="text-red-600 w-7 h-7" />
-                    Kiểm Duyệt Đánh Giá & Nhận Xét
-                </h1>
-                <p className="text-sm text-slate-500 mt-1">
-                    Theo dõi, kiểm duyệt và quản lý các đánh giá 1-5 sao và ý kiến của khán giả về từng bộ phim.
-                </p>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-xs border border-gray-100">
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-800">
+                        Quản Lý Đánh Giá
+                    </h1>
+                </div>
+                <button
+                    type="button"
+                    onClick={fetchReviews}
+                    disabled={loading}
+                    className="bg-gray-100 hover:bg-gray-200 active:scale-95 text-gray-700 font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-2xs cursor-pointer disabled:opacity-50"
+                >
+                    <RotateCcw size={16} className={loading ? 'animate-spin' : ''} />
+                    <span>Làm mới</span>
+                </button>
             </div>
 
             {/* Filters */}
-            <div className="bg-white p-4 rounded-2xl shadow-xs border border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-center">
+            <div className="bg-white p-5 rounded-2xl shadow-xs border border-gray-100 flex flex-col md:flex-row gap-4 justify-between items-center">
                 <form onSubmit={handleSearchSubmit} className="relative w-full md:w-80">
                     <input
                         type="text"
                         placeholder="Tìm theo nội dung, tên user, email..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition"
+                        className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 focus:bg-white transition-all"
                     />
-                    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 </form>
 
                 <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
                     {/* Movie Filter */}
                     <div className="flex items-center gap-2">
-                        <label className="text-sm font-medium text-slate-600 whitespace-nowrap">Phim:</label>
+                        <label className="text-sm font-medium text-gray-600 whitespace-nowrap">Phim:</label>
                         <select
                             value={selectedMovieId}
                             onChange={(e) => {
                                 setSelectedMovieId(e.target.value);
                                 setPageNo(0);
                             }}
-                            className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 max-w-xs truncate"
+                            className="bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all font-medium max-w-xs truncate cursor-pointer"
                         >
                             <option value="">Tất cả phim ({movies.length})</option>
                             {movies.map((m) => (
@@ -219,14 +226,14 @@ const ReviewManagement = () => {
 
                     {/* Status Filter */}
                     <div className="flex items-center gap-2">
-                        <label className="text-sm font-medium text-slate-600 whitespace-nowrap">Trạng thái:</label>
+                        <label className="text-sm font-medium text-gray-600 whitespace-nowrap">Trạng thái:</label>
                         <select
                             value={statusFilter}
                             onChange={(e) => {
                                 setStatusFilter(e.target.value);
                                 setPageNo(0);
                             }}
-                            className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500"
+                            className="bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all font-medium cursor-pointer"
                         >
                             <option value="">Tất cả</option>
                             <option value="PUBLISHED">Hiển thị (PUBLISHED)</option>
@@ -239,7 +246,7 @@ const ReviewManagement = () => {
                     {(search || selectedMovieId || statusFilter) && (
                         <button
                             onClick={handleClearFilters}
-                            className="px-3 py-2 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                            className="px-3.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
                         >
                             <RotateCcw size={14} /> Xóa bộ lọc
                         </button>
@@ -248,10 +255,10 @@ const ReviewManagement = () => {
             </div>
 
             {/* Reviews Table */}
-            <div className="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-xs border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm min-w-[1100px]">
-                        <thead className="bg-slate-50 text-slate-700 font-bold border-b border-slate-200 uppercase text-[11px] tracking-wider">
+                        <thead className="bg-gray-50/80 border-b border-gray-200 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
                             <tr>
                                 <th className="py-3.5 px-4 w-16 text-center">ID</th>
                                 <th className="py-3.5 px-4 w-60">Phim</th>
@@ -263,34 +270,34 @@ const ReviewManagement = () => {
                                 <th className="py-3.5 px-4 text-right w-28 whitespace-nowrap">Thao Tác</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-gray-100">
                             {loading ? (
                                 <tr>
-                                    <td colSpan="8" className="text-center py-12 text-slate-400">
+                                    <td colSpan="8" className="text-center py-12 text-gray-400 font-medium">
                                         Đang tải danh sách nhận xét...
                                     </td>
                                 </tr>
                             ) : reviews.length === 0 ? (
                                 <tr>
-                                    <td colSpan="8" className="text-center py-12 text-slate-400">
+                                    <td colSpan="8" className="text-center py-12 text-gray-400 font-medium">
                                         Không tìm thấy nhận xét nào.
                                     </td>
                                 </tr>
                             ) : (
                                 reviews.map((r) => (
-                                    <tr key={r.id} className="hover:bg-slate-50/80 transition">
-                                        <td className="py-3.5 px-4 font-bold text-slate-600 text-center">#{r.id}</td>
+                                    <tr key={r.id} className="hover:bg-gray-50/50 transition-colors">
+                                        <td className="py-3.5 px-4 font-bold text-gray-600 text-center">{r.id}</td>
                                         <td className="py-3.5 px-4">
-                                            <p className="font-bold text-slate-800 line-clamp-2 leading-snug" title={r.movieTitle}>
+                                            <p className="font-bold text-gray-800 line-clamp-2 leading-snug" title={r.movieTitle}>
                                                 {r.movieTitle || `Phim #${r.movieId}`}
                                             </p>
                                         </td>
                                         <td className="py-3.5 px-4">
-                                            <p className="font-semibold text-slate-800 truncate" title={r.userFullName}>
+                                            <p className="font-semibold text-gray-800 truncate" title={r.userFullName}>
                                                 {r.userFullName || 'Khách hàng'}
                                             </p>
                                             {r.userEmail && !r.userEmail.startsWith('rev_') && (
-                                                <p className="text-xs text-slate-400 truncate" title={r.userEmail}>
+                                                <p className="text-xs text-gray-400 truncate" title={r.userEmail}>
                                                     {r.userEmail}
                                                 </p>
                                             )}
@@ -298,19 +305,19 @@ const ReviewManagement = () => {
                                         <td className="py-3.5 px-4 whitespace-nowrap">
                                             <div className="flex flex-col gap-1">
                                                 {renderStars(r.rating)}
-                                                <span className="text-xs font-bold text-slate-600">{r.rating}/5 sao</span>
+                                                <span className="text-xs font-bold text-gray-600">{r.rating}/5 sao</span>
                                             </div>
                                         </td>
                                         <td className="py-3.5 px-4">
-                                            <div 
+                                            <div
                                                 className="cursor-pointer group"
                                                 onClick={() => setSelectedReview(r)}
                                                 title="Bấm để xem chi tiết nhận xét"
                                             >
-                                                <p className="text-slate-700 text-xs sm:text-sm line-clamp-2 italic group-hover:text-red-600 transition">
+                                                <p className="text-gray-700 text-xs sm:text-sm line-clamp-2 italic group-hover:text-red-600 transition">
                                                     "{formatComment(r.comment)}"
                                                 </p>
-                                                <span className="text-[11px] text-slate-400 mt-1 block group-hover:underline">
+                                                <span className="text-[11px] text-gray-400 mt-1 block group-hover:underline">
                                                     {r.createdAt ? new Date(r.createdAt).toLocaleString('vi-VN') : ''} • Bấm để xem toàn bộ
                                                 </span>
                                             </div>
@@ -321,7 +328,7 @@ const ReviewManagement = () => {
                                                     <CheckCircle size={12} className="shrink-0" /> Đã mua vé
                                                 </span>
                                             ) : (
-                                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-slate-50 text-slate-500 border border-slate-200">
+                                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-gray-50 text-gray-500 border border-gray-200">
                                                     <XCircle size={12} className="shrink-0" /> Chưa mua
                                                 </span>
                                             )}
@@ -334,7 +341,7 @@ const ReviewManagement = () => {
                                                 {r.status !== 'PUBLISHED' && (
                                                     <button
                                                         onClick={() => handlePublish(r)}
-                                                        className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg border border-emerald-200 transition"
+                                                        className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg border border-emerald-200 transition cursor-pointer"
                                                         title="Hiển thị nhận xét"
                                                     >
                                                         <Eye size={16} />
@@ -343,7 +350,7 @@ const ReviewManagement = () => {
                                                 {r.status === 'PUBLISHED' && (
                                                     <button
                                                         onClick={() => handleHide(r)}
-                                                        className="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg border border-amber-200 transition"
+                                                        className="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg border border-amber-200 transition cursor-pointer"
                                                         title="Ẩn nhận xét"
                                                     >
                                                         <EyeOff size={16} />
@@ -352,7 +359,7 @@ const ReviewManagement = () => {
                                                 {r.status !== 'DELETED' && (
                                                     <button
                                                         onClick={() => handleDelete(r)}
-                                                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg border border-red-200 transition"
+                                                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg border border-red-200 transition cursor-pointer"
                                                         title="Đánh dấu xóa"
                                                     >
                                                         <Trash2 size={16} />
@@ -366,9 +373,11 @@ const ReviewManagement = () => {
                         </tbody>
                     </table>
                 </div>
+            </div>
 
-                {/* Standardized Pagination */}
-                {totalElements > 0 && (
+            {/* Standardized Pagination */}
+            {!loading && totalElements > 0 && (
+                <div className="bg-white p-4 rounded-2xl shadow-xs border border-gray-100">
                     <Pagination
                         pageNo={pageNo}
                         pageSize={pageSize}
@@ -380,8 +389,8 @@ const ReviewManagement = () => {
                             setPageNo(0);
                         }}
                     />
-                )}
-            </div>
+                </div>
+            )}
 
             {/* Review Detail Modal */}
             {selectedReview && (

@@ -6,10 +6,12 @@ import { OrderSummary } from '../components/payment/OrderSummary';
 import { PaymentPanel } from '../components/payment/PaymentPanel';
 import ROUTES from '../constants/routes';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 export const Payment = () => {
     const { reservationId } = useParams();
     const navigate = useNavigate();
+    const { token, loading: authLoading } = useAuth();
 
     const [reservationData, setReservationData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -68,7 +70,7 @@ export const Payment = () => {
                 setErrorMessage('Bạn không có quyền xem đơn đặt vé của người dùng khác.');
             } else if (status === 401) {
                 setErrorMessage('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
-                navigate(ROUTES.LOGIN);
+                navigate(`/login?redirect=${encodeURIComponent(`/payment/${reservationId}`)}`, { replace: true });
             } else {
                 setErrorMessage(err.message || 'Không thể tải thông tin đơn đặt vé.');
             }
@@ -78,9 +80,16 @@ export const Payment = () => {
     }, [reservationId, navigate]);
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        fetchReservationReview();
-    }, [fetchReservationReview]);
+        if (!authLoading && !token && reservationId) {
+            sessionStorage.setItem('cinemind_pending_payment_url', `/payment/${reservationId}`);
+            navigate(`/login?redirect=${encodeURIComponent(`/payment/${reservationId}`)}`, { replace: true });
+            return;
+        }
+        if (token) {
+            sessionStorage.removeItem('cinemind_pending_payment_url');
+            fetchReservationReview();
+        }
+    }, [authLoading, token, reservationId, navigate, fetchReservationReview]);
 
     // 2. Countdown Timer Loop
     useEffect(() => {

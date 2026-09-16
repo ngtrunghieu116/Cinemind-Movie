@@ -316,8 +316,8 @@ def get_user_booking_history_sql(user_id: int, limit: Optional[int] = None) -> L
             ]
             fnb_subtotal = sum(item["subtotal"] for item in order_items)
             showtime_start_str = (r.showtime.start_time).strftime("%d/%m/%Y %H:%M") if (r.showtime and r.showtime.start_time) else ""
-            created_at_str = (r.created_at + timedelta(hours=7)).strftime("%d/%m/%Y %H:%M") if r.created_at else None
-            expires_at_str = (r.expires_at + timedelta(hours=7)).strftime("%d/%m/%Y %H:%M") if r.expires_at else None
+            created_at_str = r.created_at.strftime("%d/%m/%Y %H:%M") if r.created_at else None
+            expires_at_str = r.expires_at.strftime("%d/%m/%Y %H:%M") if r.expires_at else None
             results.append({
                 "reservation_id": r.id,
                 "booking_code": r.booking_code,
@@ -359,8 +359,8 @@ def get_reservation_detail_sql(booking_code: str) -> Dict[str, Any]:
         ]
         fnb_subtotal = sum(item["subtotal"] for item in order_items)
         showtime_start_str = (r.showtime.start_time).strftime("%d/%m/%Y %H:%M") if (r.showtime and r.showtime.start_time) else ""
-        created_at_str = (r.created_at + timedelta(hours=7)).strftime("%d/%m/%Y %H:%M") if r.created_at else None
-        expires_at_str = (r.expires_at + timedelta(hours=7)).strftime("%d/%m/%Y %H:%M") if r.expires_at else None
+        created_at_str = r.created_at.strftime("%d/%m/%Y %H:%M") if r.created_at else None
+        expires_at_str = r.expires_at.strftime("%d/%m/%Y %H:%M") if r.expires_at else None
         return {
             "reservation_id": r.id,
             "booking_code": r.booking_code,

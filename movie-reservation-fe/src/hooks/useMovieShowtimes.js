@@ -36,8 +36,12 @@ export const useMovieShowtimes = (movieId, selectedDate) => {
                 size: 50
             });
 
-            // If Paginated response
-            const showtimeList = response.content || response || [];
+            // If Paginated response - filter strictly for future/upcoming showtimes
+            const now = new Date();
+            const rawList = response.content || response || [];
+            const showtimeList = Array.isArray(rawList)
+                ? rawList.filter(st => st && st.startTime && new Date(st.startTime) > now)
+                : [];
             setData(showtimeList);
         } catch (err) {
             console.error(`Failed to fetch showtimes for movieId=${movieId}:`, err);

@@ -87,8 +87,17 @@ public class ShowtimeSeatService {
      */
     @Transactional(readOnly = true)
     public List<PublicShowtimeSeatResponse> getPublicSeatMap(Long showtimeId) {
-        if (!showtimeRepository.existsById(showtimeId)) {
-            throw new ResourceNotFoundException("Không tìm thấy suất chiếu ID: " + showtimeId);
+        Showtime showtime = showtimeRepository.findById(showtimeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy suất chiếu ID: " + showtimeId));
+
+        if (Boolean.FALSE.equals(showtime.getIsActive())) {
+            throw new ShowtimeNotBookableException("Suất chiếu hiện đang bị vô hiệu hóa");
+        }
+        if (Boolean.FALSE.equals(showtime.getIsOnlineSelling())) {
+            throw new ShowtimeNotBookableException("Suất chiếu tạm dừng bán vé trực tuyến");
+        }
+        if (showtime.getStartTime().isBefore(LocalDateTime.now())) {
+            throw new ShowtimeNotBookableException("Suất chiếu đã bắt đầu hoặc đã qua giờ chiếu");
         }
 
         List<ShowtimeSeat> seats = showtimeSeatRepository.findByShowtimeIdOrderBySeatRowNameAscSeatSeatNumberAsc(showtimeId);
@@ -144,11 +153,10 @@ public class ShowtimeSeatService {
             if (currentStatus == ShowtimeSeatStatus.HELD) {
                 if (request.getHoldToken() != null
                         && request.getHoldToken().trim().equals(ss.getHoldToken())
-                        && ss.getHeldByUser() != null
-                        && ss.getHeldByUser().getId().equals(currentUser.getId())
+                        && (ss.getHeldByUser() == null || (currentUser != null && ss.getHeldByUser().getId().equals(currentUser.getId())))
                         && ss.getLockedUntil() != null
                         && ss.getLockedUntil().isAfter(now)) {
-                    // Already held by the same user in this active hold session
+                    // Already held by the same user or holdToken in this active hold session
                     continue;
                 }
                 if (ss.getLockedUntil() != null && ss.getLockedUntil().isAfter(now)) {
@@ -170,7 +178,7 @@ public class ShowtimeSeatService {
             }
 
             ShowtimeSeat sampleSeat = existingHeldSeats.get(0);
-            if (sampleSeat.getHeldByUser() == null || !sampleSeat.getHeldByUser().getId().equals(currentUser.getId())) {
+            if (sampleSeat.getHeldByUser() != null && (currentUser == null || !sampleSeat.getHeldByUser().getId().equals(currentUser.getId()))) {
                 throw new SeatHoldOwnershipException("Bạn không có quyền thao tác trên phiên giữ ghế của người dùng khác");
             }
             if (sampleSeat.getLockedUntil() == null || !sampleSeat.getLockedUntil().isAfter(now)) {
@@ -247,7 +255,7 @@ public class ShowtimeSeatService {
             if (!request.getHoldToken().equals(ss.getHoldToken())) {
                 throw new InvalidSeatHoldException("Mã holdToken không khớp cho ghế " + ss.getSeat().getRowName() + ss.getSeat().getSeatNumber());
             }
-            if (ss.getHeldByUser() == null || !ss.getHeldByUser().getId().equals(currentUser.getId())) {
+            if (ss.getHeldByUser() != null && (currentUser == null || !ss.getHeldByUser().getId().equals(currentUser.getId()))) {
                 throw new SeatHoldOwnershipException("Bạn không có quyền giải phóng ghế " + ss.getSeat().getRowName() + ss.getSeat().getSeatNumber());
             }
             if (ss.getLockedUntil() == null || !ss.getLockedUntil().isAfter(now)) {

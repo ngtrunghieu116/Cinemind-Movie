@@ -20,7 +20,7 @@ public interface IShowtimeService {
     
     Page<AdminShowtimeResponse> getShowtimesByRoom(Long roomId, int page, int size);
     
-    Page<AdminShowtimeResponse> searchShowtimes(Long theaterId, Long roomId, Long movieId, LocalDateTime fromDate, LocalDateTime toDate, int page, int size);
+    Page<AdminShowtimeResponse> searchShowtimes(Long theaterId, Long roomId, Long movieId, String search, String status, LocalDateTime fromDate, LocalDateTime toDate, int page, int size);
 
     Page<PublicShowtimeResponse> searchPublicShowtimes(Long theaterId, Long roomId, Long movieId, LocalDateTime fromDate, LocalDateTime toDate, int page, int size);
 
