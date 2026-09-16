@@ -91,13 +91,13 @@ def build_enriched_context_prompt(token: Optional[str] = None, user_id: Optional
             with get_db() as db:
                 from db.models import Reservation
                 from datetime import timedelta
-                now_utc = datetime.utcnow()
+                now_vn = datetime.now(tz).replace(tzinfo=None)
                 pending_revs = (
                     db.query(Reservation)
                     .filter(
                         Reservation.user_id == user_info['user_id'],
                         Reservation.status == "PENDING",
-                        Reservation.expires_at > now_utc
+                        Reservation.expires_at > now_vn
                     )
                     .order_by(Reservation.created_at.desc())
                     .all()
@@ -109,7 +109,7 @@ def build_enriched_context_prompt(token: Optional[str] = None, user_id: Optional
                         st_time = prv.showtime.start_time.strftime("%H:%M %d/%m") if prv.showtime else ""
                         seats_str = ", ".join([f"{rs.seat.row_name}{rs.seat.seat_number}" for rs in prv.reserved_seats])
                         items_str = ", ".join([f"{oi.quantity}x {oi.product.name}" for oi in prv.order_items if oi.product]) or "Chưa có bắp nước"
-                        rem_seconds = int((prv.expires_at - now_utc).total_seconds())
+                        rem_seconds = int((prv.expires_at - now_vn).total_seconds())
                         rem_min = max(0, rem_seconds // 60)
                         prompt_lines.append(
                             f"  * Đơn {prv.booking_code} (ID: {prv.id}): Phim '{m_title}' (Suất {prv.showtime_id} lúc {st_time}) | Ghế: [{seats_str}] | Bắp nước: [{items_str}] | Tổng tiền: {int(prv.total_price):,}đ | Còn {rem_min} phút giữ chỗ | Link thanh toán: /payment/{prv.id}"

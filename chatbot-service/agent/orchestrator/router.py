@@ -63,7 +63,9 @@ class IntentOrchestrator:
             "chiếu gì", "chiếu phim gì", "lịch phim", "suất nào", "giờ chiếu", "khung giờ",
             "bắp nước", "thêm bắp", "thêm nước", "thêm combo", "thêm món", 
             "cho tôi thêm", "cho thêm", "lấy thêm", "bổ sung bắp", "bỏ bắp", 
-            "bớt bắp", "đặt thêm", "đặt tiếp", "combo solo", "combo đôi", "combo vip"
+            "bớt bắp", "đặt thêm", "đặt tiếp", "combo solo", "combo đôi", "combo vip",
+            "giá bắp", "giá nước", "menu bắp", "menu nước", "giá combo", "bảng giá bắp",
+            "bỏng ngô", "bắp rang bơ", "bắp nước bao nhiêu", "bán bắp gì", "có bắp gì"
         ]):
             return "BOOKING"
 

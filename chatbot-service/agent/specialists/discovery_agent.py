@@ -1,10 +1,10 @@
 from .base_agent import SpecialistAgent
 from agent.prompts import DISCOVERY_AGENT_PROMPT
 from tools.rag_tools import query_movie_knowledge_rag, search_reviews_rag
-from tools.db_tools import search_movies_sql, get_showtimes_sql
+from tools.db_tools import search_movies_sql, get_showtimes_sql, get_pricing_combos_sql
 
 class DiscoveryAgent(SpecialistAgent):
-    """Agent chuyên khám phá phim, tóm tắt, review, quy định rạp bằng RAG."""
+    """Agent chuyên khám phá phim, tóm tắt, review, quy định rạp bằng RAG và menu bắp nước."""
     def __init__(self):
         super().__init__(
             name="discovery_agent",
@@ -13,7 +13,8 @@ class DiscoveryAgent(SpecialistAgent):
                 query_movie_knowledge_rag,
                 search_reviews_rag,
                 search_movies_sql,
-                get_showtimes_sql
+                get_showtimes_sql,
+                get_pricing_combos_sql
             ]
         )
 

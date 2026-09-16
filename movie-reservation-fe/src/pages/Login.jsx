@@ -32,6 +32,11 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const getRedirectTarget = () => {
+    const searchParams = new URLSearchParams(location.search);
+    return searchParams.get('redirect') || location.state?.from || '/';
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -40,7 +45,7 @@ const Login = () => {
     try {
       const response = await authApi.login(formData);
       loginSuccess(response);
-      navigate('/');
+      navigate(getRedirectTarget(), { replace: true });
     } catch (err) {
       setError(err.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại!');
     } finally {
@@ -54,7 +59,7 @@ const Login = () => {
     try {
       const response = await authApi.googleLogin({ idToken: credentialResponse.credential });
       loginSuccess(response);
-      navigate('/');
+      navigate(getRedirectTarget(), { replace: true });
     } catch (err) {
       setError(err.message || 'Đăng nhập Google thất bại!');
     } finally {
@@ -161,7 +166,7 @@ const Login = () => {
 
         <p className="mt-6 text-center text-sm text-slate-500">
           Chưa có tài khoản?{' '}
-          <Link to="/register" className="font-semibold text-red-600 hover:text-red-700 transition">
+          <Link to={location.search ? `/register${location.search}` : '/register'} className="font-semibold text-red-600 hover:text-red-700 transition">
             Đăng ký ngay
           </Link>
         </p>

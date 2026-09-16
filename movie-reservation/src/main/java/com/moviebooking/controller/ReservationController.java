@@ -23,7 +23,7 @@ public class ReservationController {
     @PostMapping
     public ResponseEntity<ReservationReviewResponse> createReservation(
             @Valid @RequestBody CreateReservationRequest request) {
-        User currentUser = securityUtils.getCurrentUser();
+        User currentUser = securityUtils.getCurrentUserOptional().orElse(null);
         return ResponseEntity.ok(bookingService.createReservation(request, currentUser));
     }
 
@@ -31,7 +31,7 @@ public class ReservationController {
     public ResponseEntity<ReservationReviewResponse> addComboToReservation(
             @PathVariable Long reservationId,
             @Valid @RequestBody AddComboRequest request) {
-        User currentUser = securityUtils.getCurrentUser();
+        User currentUser = securityUtils.getCurrentUserOptional().orElse(null);
         return ResponseEntity.ok(bookingService.addComboToReservation(reservationId, request, currentUser));
     }
 
@@ -40,7 +40,7 @@ public class ReservationController {
             @PathVariable Long reservationId,
             @PathVariable Long itemId,
             @Valid @RequestBody UpdateComboQuantityRequest request) {
-        User currentUser = securityUtils.getCurrentUser();
+        User currentUser = securityUtils.getCurrentUserOptional().orElse(null);
         return ResponseEntity.ok(bookingService.updateComboQuantity(reservationId, itemId, request, currentUser));
     }
 
@@ -48,14 +48,14 @@ public class ReservationController {
     public ResponseEntity<ReservationReviewResponse> removeComboFromReservation(
             @PathVariable Long reservationId,
             @PathVariable Long itemId) {
-        User currentUser = securityUtils.getCurrentUser();
+        User currentUser = securityUtils.getCurrentUserOptional().orElse(null);
         return ResponseEntity.ok(bookingService.removeComboFromReservation(reservationId, itemId, currentUser));
     }
 
     @GetMapping("/{reservationId}/review")
     public ResponseEntity<ReservationReviewResponse> reviewReservation(
             @PathVariable Long reservationId) {
-        User currentUser = securityUtils.getCurrentUser();
+        User currentUser = securityUtils.getCurrentUserOptional().orElse(null);
         return ResponseEntity.ok(bookingService.reviewReservation(reservationId, currentUser));
     }
 

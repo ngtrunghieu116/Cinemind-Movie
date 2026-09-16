@@ -162,16 +162,16 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fadeIn pb-10">
       {/* Header Banner Section */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-xs border border-gray-100">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Quản Lý Người Dùng</h1>
         </div>
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-wrap gap-4 items-end">
+      <div className="bg-white p-5 rounded-2xl shadow-xs border border-gray-100 flex flex-wrap gap-4 items-end">
         <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider w-full mb-1">
           <Filter size={14} /> Bộ Lọc Tìm Kiếm
         </div>
@@ -182,11 +182,11 @@ const UserManagement = () => {
             Tìm kiếm
           </label>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
               placeholder="Tìm theo tên, email, SĐT..."
-              className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-white"
+              className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 focus:bg-white transition-all"
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -203,7 +203,7 @@ const UserManagement = () => {
             Vai trò
           </label>
           <select
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-white"
+            className="w-full bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all font-medium cursor-pointer"
             value={filterRole}
             onChange={(e) => { setFilterRole(e.target.value); setPage(0); }}
           >
@@ -219,7 +219,7 @@ const UserManagement = () => {
             Trạng thái
           </label>
           <select
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-white"
+            className="w-full bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all font-medium cursor-pointer"
             value={filterStatus}
             onChange={(e) => { setFilterStatus(e.target.value); setPage(0); }}
           >
@@ -233,7 +233,7 @@ const UserManagement = () => {
         {(search || filterRole || filterStatus) && (
           <button
             onClick={handleClearFilters}
-            className="px-3.5 py-2 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <RotateCcw size={14} /> Xóa bộ lọc
           </button>
@@ -241,19 +241,19 @@ const UserManagement = () => {
       </div>
 
       {/* Table Card */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-xs border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">Họ & Tên</th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">Số Điện Thoại</th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">Vai Trò</th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">Trạng Thái</th>
-                <th className="px-6 py-3.5 text-xs font-semibold text-gray-600 uppercase tracking-wider">Ngày Tạo</th>
-                <th className="px-6 py-3.5 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Thao Tác</th>
+              <tr className="bg-gray-50/80 border-b border-gray-200 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                <th className="px-5 py-3.5">ID</th>
+                <th className="px-5 py-3.5">Họ & Tên</th>
+                <th className="px-5 py-3.5">Email</th>
+                <th className="px-5 py-3.5">Số Điện Thoại</th>
+                <th className="px-5 py-3.5">Vai Trò</th>
+                <th className="px-5 py-3.5">Trạng Thái</th>
+                <th className="px-5 py-3.5">Ngày Tạo</th>
+                <th className="px-5 py-3.5 text-right">Thao Tác</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 text-sm">
@@ -261,7 +261,7 @@ const UserManagement = () => {
                 <tr>
                   <td colSpan="8" className="text-center py-10 text-gray-500 font-medium">
                     <div className="flex items-center justify-center gap-2">
-                      <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                      <div className="w-5 h-5 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
                       Đang tải danh sách người dùng...
                     </div>
                   </td>
@@ -272,7 +272,7 @@ const UserManagement = () => {
                     <p className="text-red-500 font-medium mb-2">Không thể lấy dữ liệu người dùng</p>
                     <button
                       onClick={fetchUsers}
-                      className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition-all font-medium text-xs"
+                      className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded-xl hover:bg-red-100 transition-all font-medium text-xs cursor-pointer"
                     >
                       Thử lại
                     </button>
@@ -290,32 +290,32 @@ const UserManagement = () => {
               ) : (
                 users.map(u => (
                   <tr key={u.id} className="hover:bg-blue-50/30 transition-colors duration-150">
-                    <td className="px-6 py-4 font-semibold text-gray-400 text-xs">
+                    <td className="px-5 py-3.5 font-semibold text-gray-400 text-xs">
                       #{u.id}
                     </td>
-                    <td className="px-6 py-4 font-semibold text-gray-800">
+                    <td className="px-5 py-3.5 font-semibold text-gray-800">
                       {u.lastName} {u.firstName}
                     </td>
-                    <td className="px-6 py-4 text-gray-600 font-medium">
+                    <td className="px-5 py-3.5 text-gray-600 font-medium">
                       {u.email}
                     </td>
-                    <td className="px-6 py-4 text-gray-700 font-mono text-xs">
+                    <td className="px-5 py-3.5 text-gray-700 font-mono text-xs">
                       {u.phone || 'N/A'}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-5 py-3.5">
                       <span className={`px-2.5 py-1 text-xs font-bold rounded-full border ${u.role === 'ADMIN' ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-blue-50 text-blue-700 border-blue-200'}`}>
                         {u.role}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-5 py-3.5">
                       <span className={`px-2.5 py-1 text-xs font-bold rounded-full border ${u.status === 'BLOCKED' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}`}>
-                        {u.status === 'BLOCKED' ? '● Đã khóa' : '● Hoạt động'}
+                        {u.status === 'BLOCKED' ? 'Đã khóa' : 'Hoạt động'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-gray-500 text-xs">
+                    <td className="px-5 py-3.5 text-gray-500 text-xs">
                       {u.createdAt ? format(new Date(u.createdAt), 'dd/MM/yyyy HH:mm') : 'N/A'}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-5 py-3.5 text-right">
                       <div className="flex items-center justify-end gap-1">
                         <button
                           onClick={() => handleOpenEditModal(u)}
@@ -346,17 +346,21 @@ const UserManagement = () => {
             </tbody>
           </table>
         </div>
-
-        {/* Standardized Pagination */}
-        <Pagination
-          pageNo={page}
-          pageSize={pageSize}
-          totalElements={totalElements}
-          totalPages={totalPages}
-          onPageChange={setPage}
-          onPageSizeChange={(newSize) => { setPageSize(newSize); setPage(0); }}
-        />
       </div>
+
+      {/* Server-side Pagination */}
+      {!loading && !fetchError && totalElements > 0 && (
+        <div className="bg-white p-4 rounded-2xl shadow-xs border border-gray-100">
+          <Pagination
+            pageNo={page}
+            pageSize={pageSize}
+            totalElements={totalElements}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            onPageSizeChange={(newSize) => { setPageSize(newSize); setPage(0); }}
+          />
+        </div>
+      )}
 
       {/* Edit User Modal */}
       {isEditModalOpen && selectedUser && (

@@ -33,14 +33,14 @@ const AdminLayout = () => {
     const navItems = [
         { path: '/', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
         { path: '/bookings', icon: <Ticket size={20} />, label: 'Quản Lý Đặt Vé' },
-        { path: '/genres', icon: <Tags size={20} />, label: 'Thể Loại' },
-        { path: '/movies', icon: <Film size={20} />, label: 'Phim Chiếu' },
-        { path: '/theaters', icon: <Building2 size={20} />, label: 'Cơ Sở Rạp' },
-        { path: '/showtimes', icon: <Calendar size={20} />, label: 'Lịch Chiếu' },
-        { path: '/products', icon: <Coffee size={20} />, label: 'Bắp & Nước F&B' },
-        { path: '/articles', icon: <FileText size={20} />, label: 'Tin Tức & Bài Viết' },
-        { path: '/reviews', icon: <MessageSquare size={20} />, label: 'Đánh Giá & Nhận Xét' },
-        { path: '/users', icon: <Users size={20} />, label: 'Người Dùng' },
+        { path: '/genres', icon: <Tags size={20} />, label: 'Quản Lý Thể Loại' },
+        { path: '/movies', icon: <Film size={20} />, label: 'Quản Lý Phim' },
+        { path: '/theaters', icon: <Building2 size={20} />, label: 'Quản Lý Cơ Sở Rạp' },
+        { path: '/showtimes', icon: <Calendar size={20} />, label: 'Quản Lý Lịch Chiếu' },
+        { path: '/products', icon: <Coffee size={20} />, label: 'Quản Lý Sản Phẩm' },
+        { path: '/articles', icon: <FileText size={20} />, label: 'Quản Lý Tin Tức' },
+        { path: '/reviews', icon: <MessageSquare size={20} />, label: 'Quản Lý Đánh Giá' },
+        { path: '/users', icon: <Users size={20} />, label: 'Quản Lý Người Dùng' },
     ];
 
     return (

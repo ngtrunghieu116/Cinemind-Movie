@@ -197,49 +197,45 @@ const ArticleManagement = () => {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 animate-fadeIn pb-10">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-xs border border-slate-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-xs border border-gray-100">
                 <div>
-                    <h1 className="text-2xl font-black text-slate-800 flex items-center gap-2.5">
-                        <FileText className="text-red-600 w-7 h-7" />
-                        Quản Lý Bài Viết Tin Tức
+                    <h1 className="text-2xl font-bold text-gray-800">
+                        Quản Lý Tin Tức
                     </h1>
-                    <p className="text-sm text-slate-500 mt-1">
-                        Quản lý tin tức điện ảnh, sự kiện và khuyến mãi phục vụ người dùng & làm nguồn dữ liệu cho AI.
-                    </p>
                 </div>
                 <button
                     onClick={() => handleOpenModal()}
-                    className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2.5 rounded-xl shadow-md shadow-red-600/20 transition-all self-start sm:self-auto"
+                    className="bg-red-600 hover:bg-red-700 active:scale-95 text-white font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-xs cursor-pointer self-start sm:self-auto"
                 >
                     <Plus size={18} />
-                    Tạo Bài Viết Mới
+                    <span>Tạo Bài Viết Mới</span>
                 </button>
             </div>
 
             {/* Filter & Search */}
-            <div className="bg-white p-4 rounded-2xl shadow-xs border border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-center">
+            <div className="bg-white p-5 rounded-2xl shadow-xs border border-gray-100 flex flex-col md:flex-row gap-4 justify-between items-center">
                 <form onSubmit={handleSearchSubmit} className="relative w-full md:w-96">
                     <input
                         type="text"
                         placeholder="Tìm theo tiêu đề bài viết..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition"
+                        className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 focus:bg-white transition-all"
                     />
-                    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 </form>
 
                 <div className="flex items-center gap-3 w-full md:w-auto">
-                    <label className="text-sm font-medium text-slate-600 whitespace-nowrap">Trạng thái:</label>
+                    <label className="text-sm font-medium text-gray-600 whitespace-nowrap">Trạng thái:</label>
                     <select
                         value={statusFilter}
                         onChange={(e) => {
                             setStatusFilter(e.target.value);
                             setPageNo(0);
                         }}
-                        className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500"
+                        className="bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all font-medium cursor-pointer"
                     >
                         <option value="">Tất cả trạng thái</option>
                         <option value="PUBLISHED">Đã xuất bản (PUBLISHED)</option>
@@ -250,10 +246,10 @@ const ArticleManagement = () => {
             </div>
 
             {/* Articles Table */}
-            <div className="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-xs border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-slate-50 text-slate-700 font-bold border-b border-slate-200 uppercase text-[11px] tracking-wider">
+                        <thead className="bg-gray-50/80 border-b border-gray-200 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
                             <tr>
                                 <th className="py-3.5 px-4 w-16">ID</th>
                                 <th className="py-3.5 px-4 w-24">Ảnh Bìa</th>
@@ -263,68 +259,68 @@ const ArticleManagement = () => {
                                 <th className="py-3.5 px-4 text-right w-44">Thao Tác</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-gray-100">
                             {loading ? (
                                 <tr>
-                                    <td colSpan="6" className="text-center py-12 text-slate-400">
+                                    <td colSpan="6" className="text-center py-12 text-gray-400 font-medium">
                                         Đang tải danh sách bài viết...
                                     </td>
                                 </tr>
                             ) : articles.length === 0 ? (
                                 <tr>
-                                    <td colSpan="6" className="text-center py-12 text-slate-400">
+                                    <td colSpan="6" className="text-center py-12 text-gray-400 font-medium">
                                         Không tìm thấy bài viết nào phù hợp.
                                     </td>
                                 </tr>
                             ) : (
                                 articles.map((item) => (
-                                    <tr key={item.id} className="hover:bg-slate-50/80 transition">
-                                        <td className="py-3.5 px-4 font-bold text-slate-600">#{item.id}</td>
+                                    <tr key={item.id} className="hover:bg-gray-50/50 transition-colors">
+                                        <td className="py-3.5 px-4 font-bold text-gray-600">{item.id}</td>
                                         <td className="py-3.5 px-4">
                                             {item.posterUrl ? (
                                                 <img
                                                     src={item.posterUrl.startsWith('http') ? item.posterUrl : `http://localhost:8080${item.posterUrl}`}
                                                     alt={item.title}
-                                                    className="w-16 h-12 object-cover rounded-lg border border-slate-200"
+                                                    className="w-16 h-12 object-cover rounded-lg border border-gray-200"
                                                 />
                                             ) : (
-                                                <div className="w-16 h-12 bg-slate-100 rounded-lg flex items-center justify-center text-slate-300">
+                                                <div className="w-16 h-12 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400 border border-gray-200">
                                                     <ImageIcon size={20} />
                                                 </div>
                                             )}
                                         </td>
                                         <td className="py-3.5 px-4">
-                                            <p className="font-bold text-slate-800 line-clamp-1">{item.title}</p>
-                                            <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">{item.shortDescription}</p>
+                                            <p className="font-bold text-gray-800 line-clamp-1">{item.title}</p>
+                                            <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">{item.shortDescription}</p>
                                         </td>
                                         <td className="py-3.5 px-4">
                                             {getStatusBadge(item.status)}
                                         </td>
-                                        <td className="py-3.5 px-4 text-slate-500 text-xs">
+                                        <td className="py-3.5 px-4 text-gray-500 text-xs">
                                             {item.createdAt ? new Date(item.createdAt).toLocaleDateString('vi-VN') : '—'}
                                         </td>
                                         <td className="py-3.5 px-4 text-right">
                                             <div className="flex items-center justify-end gap-1.5">
                                                 <button
                                                     onClick={() => handleTogglePublish(item)}
-                                                    className={`p-1.5 rounded-lg border transition ${item.status === 'PUBLISHED'
-                                                        ? 'text-amber-600 hover:bg-amber-50 border-amber-200'
-                                                        : 'text-emerald-600 hover:bg-emerald-50 border-emerald-200'
+                                                    className={`p-1.5 rounded-lg border transition cursor-pointer ${item.status === 'PUBLISHED'
+                                                        ? 'bg-amber-50 text-amber-600 border-amber-200 hover:bg-amber-100'
+                                                        : 'bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100'
                                                         }`}
-                                                    title={item.status === 'PUBLISHED' ? 'Ẩn bài viết' : 'Xuất bản bài viết'}
+                                                    title={item.status === 'PUBLISHED' ? 'Chuyển thành bản nháp' : 'Xuất bản bài viết'}
                                                 >
-                                                    {item.status === 'PUBLISHED' ? <EyeOff size={16} /> : <Eye size={16} />}
+                                                    {item.status === 'PUBLISHED' ? <EyeOff size={16} /> : <CheckCircle2 size={16} />}
                                                 </button>
                                                 <button
                                                     onClick={() => handleOpenModal(item)}
-                                                    className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg border border-blue-200 transition"
+                                                    className="p-1.5 rounded-lg border border-blue-200 bg-blue-50 text-blue-600 hover:bg-blue-100 transition cursor-pointer"
                                                     title="Chỉnh sửa"
                                                 >
                                                     <Edit size={16} />
                                                 </button>
                                                 <button
                                                     onClick={() => handleDelete(item)}
-                                                    className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg border border-red-200 transition"
+                                                    className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition cursor-pointer"
                                                     title="Xóa bài viết"
                                                 >
                                                     <Trash2 size={16} />
@@ -337,18 +333,18 @@ const ArticleManagement = () => {
                         </tbody>
                     </table>
                 </div>
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                    <div className="p-4 border-t border-slate-200">
-                        <Pagination
-                            currentPage={pageNo}
-                            totalPages={totalPages}
-                            onPageChange={(page) => setPageNo(page)}
-                        />
-                    </div>
-                )}
             </div>
+
+            {/* Server-side Pagination */}
+            {!loading && totalPages > 0 && (
+                <div className="bg-white p-4 rounded-2xl shadow-xs border border-gray-100">
+                    <Pagination
+                        currentPage={pageNo}
+                        totalPages={totalPages}
+                        onPageChange={(page) => setPageNo(page)}
+                    />
+                </div>
+            )}
 
             {/* Modal Create / Edit */}
             {isModalOpen && (

@@ -4,11 +4,18 @@ import re
 import uuid
 from decimal import Decimal
 from datetime import datetime, timedelta
+import pytz
 from typing import List, Union, Optional, Dict, Any
 from db.database import get_db
 from db.models import Showtime, ShowtimeSeat, Seat, Reservation, ReservedSeat, User, Product, OrderItem
 
 logger = logging.getLogger("chatbot.tools.booking")
+
+VN_TZ = pytz.timezone("Asia/Ho_Chi_Minh")
+
+def get_now_vn() -> datetime:
+    """Trả về datetime hiện tại theo giờ Việt Nam (naive datetime để tương thích với MySQL và Java)."""
+    return datetime.now(VN_TZ).replace(tzinfo=None)
 
 def _find_matching_product(query: str, products: List[Product]) -> Optional[Product]:
     """Tìm kiếm thông minh sản phẩm bắp nước/combo theo tên hoặc từ khóa."""
@@ -171,8 +178,7 @@ def book_ticket(
                 "message": f"Không tìm thấy suất chiếu với ID: {showtime_id}."
             }
 
-        now_vn = datetime.now()
-        now_utc = datetime.utcnow()
+        now_vn = get_now_vn()
         if showtime.start_time <= now_vn:
             return {
                 "success": False,
@@ -215,7 +221,7 @@ def book_ticket(
                     "error_code": "SEAT_SOLD",
                     "message": f"Ghế {seat_display} đã được bán. Vui lòng chọn ghế khác."
                 }
-            if ss.status == "HELD" and ss.locked_until and ss.locked_until > now_utc:
+            if ss.status == "HELD" and ss.locked_until and ss.locked_until > now_vn:
                 if ss.held_by_user_id != user.id:
                     return {
                         "success": False,
@@ -223,10 +229,9 @@ def book_ticket(
                         "message": f"Ghế {seat_display} đang được người khác giữ chỗ. Vui lòng chọn ghế khác."
                     }
 
-        # Tính tổng tiền vé và giữ chỗ 10 phút (lưu UTC vào DB, hiển thị giờ VN)
+        # Tính tổng tiền vé và giữ chỗ 10 phút (lưu giờ VN khớp với Spring Boot)
         hold_minutes = 10
-        locked_until_utc = now_utc + timedelta(minutes=hold_minutes)
-        locked_until_vn = locked_until_utc + timedelta(hours=7)
+        locked_until_vn = now_vn + timedelta(minutes=hold_minutes)
         hold_token = str(uuid.uuid4())
         ticket_subtotal = Decimal("0.00")
 
@@ -235,9 +240,9 @@ def book_ticket(
             ss.status = "HELD"
             ss.hold_token = hold_token
             ss.held_by_user_id = user.id
-            ss.locked_until = locked_until_utc
+            ss.locked_until = locked_until_vn
 
-        booking_code = f"REV-{int(now_utc.timestamp())}-{str(uuid.uuid4())[:4].upper()}"
+        booking_code = f"REV-{int(now_vn.timestamp())}-{str(uuid.uuid4())[:4].upper()}"
 
         # Nếu đơn mới đặt lại các ghế mà user đang giữ trong đơn PENDING cũ -> Hủy đơn cũ để thay thế bằng đơn mới
         matched_seat_ids = [ss.seat_id for ss in matched_showtime_seats]
@@ -261,8 +266,8 @@ def book_ticket(
             showtime_id=showtime.id,
             total_price=ticket_subtotal, # Tạm tính vé, sẽ cộng thêm combo ở dưới
             status="PENDING",
-            created_at=now_utc,
-            expires_at=locked_until_utc
+            created_at=now_vn,
+            expires_at=locked_until_vn
         )
         db.add(reservation)
         db.flush() # Để lấy reservation.id
@@ -342,7 +347,7 @@ def book_ticket(
         db.commit()
 
         booked_seat_names = [f"{ss.seat.row_name}{ss.seat.seat_number}" for ss in matched_showtime_seats]
-        local_start = showtime.start_time + timedelta(hours=7)
+        local_start = showtime.start_time
 
         combo_summary_str = ""
         if booked_combos:
@@ -434,7 +439,7 @@ def add_concessions_to_booking(
                 "message": f"Không tìm thấy tài khoản người dùng với ID: {user_id}."
             }
 
-        now_utc = datetime.utcnow()
+        now_vn = get_now_vn()
 
         # Tìm đơn hàng mục tiêu
         query = db.query(Reservation).filter(Reservation.user_id == user.id)
@@ -460,7 +465,7 @@ def add_concessions_to_booking(
                 "message": f"Đơn hàng {reservation.booking_code} đang ở trạng thái {reservation.status}, không thể thay đổi bắp nước."
             }
 
-        if reservation.expires_at and reservation.expires_at <= now_utc:
+        if reservation.expires_at and reservation.expires_at <= now_vn:
             reservation.status = "EXPIRED"
             # Giải phóng ghế
             for ss in reservation.showtime_seats:
@@ -529,7 +534,7 @@ def add_concessions_to_booking(
         booked_seat_names = [f"{rs.seat.row_name}{rs.seat.seat_number}" for rs in reservation.reserved_seats]
         movie_title = reservation.showtime.movie.title if (reservation.showtime and reservation.showtime.movie) else "Phim"
         showtime_str = reservation.showtime.start_time.strftime("%H:%M ngày %d/%m/%Y") if reservation.showtime else ""
-        expires_vn = (reservation.expires_at + timedelta(hours=7)).strftime("%H:%M:%S") if reservation.expires_at else ""
+        expires_vn = reservation.expires_at.strftime("%H:%M:%S") if reservation.expires_at else ""
 
         total_formatted = f"{int(total_price):,}đ".replace(",", ".")
         ticket_formatted = f"{int(ticket_subtotal):,}đ".replace(",", ".")

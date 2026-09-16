@@ -1,7 +1,13 @@
 import enum
 from datetime import datetime, date
+import pytz
 from decimal import Decimal
 from typing import Optional, List
+
+_VN_TZ = pytz.timezone("Asia/Ho_Chi_Minh")
+
+def _get_now_vn():
+    return datetime.now(_VN_TZ).replace(tzinfo=None)
 from sqlalchemy import (
     Column, BigInteger, Integer, String, Text, Boolean, DateTime, Date,
     Numeric, ForeignKey, Enum as SQLEnum, Table
@@ -166,7 +172,7 @@ class Reservation(Base):
     showtime_id = Column(BigInteger, ForeignKey("showtimes.id"), nullable=False)
     total_price = Column(Numeric(10, 2), nullable=False)
     status = Column(String(20), nullable=False, default="PENDING")
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=_get_now_vn)
     expires_at = Column(DateTime, nullable=False)
 
     user = relationship("User", back_populates="reservations")

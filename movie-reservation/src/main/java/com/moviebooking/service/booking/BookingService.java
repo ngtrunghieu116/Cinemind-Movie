@@ -42,9 +42,6 @@ public class BookingService {
 
     @Transactional
     public ReservationReviewResponse createReservation(CreateReservationRequest request, User currentUser) {
-        if (currentUser == null) {
-            throw new AccessDeniedException("Người dùng chưa đăng nhập hoặc phiên làm việc đã hết hạn");
-        }
         if (request.getShowtimeId() == null) {
             throw new ResourceNotFoundException("showtimeId không được để trống");
         }
@@ -91,7 +88,7 @@ public class BookingService {
             if (!request.getHoldToken().equals(ss.getHoldToken())) {
                 throw new InvalidSeatHoldException("Mã holdToken không khớp cho ghế " + ss.getSeat().getRowName() + ss.getSeat().getSeatNumber());
             }
-            if (ss.getHeldByUser() == null || !ss.getHeldByUser().getId().equals(currentUser.getId())) {
+            if (ss.getHeldByUser() != null && (currentUser == null || !ss.getHeldByUser().getId().equals(currentUser.getId()))) {
                 throw new SeatHoldOwnershipException("Bạn không có quyền thao tác trên ghế giữ chỗ của người dùng khác");
             }
             if (ss.getLockedUntil() == null || !ss.getLockedUntil().isAfter(now)) {
@@ -108,11 +105,20 @@ public class BookingService {
                 Reservation existingReservation = reservationRepository.findById(firstReservationId)
                         .orElse(null);
                 if (existingReservation != null
-                        && existingReservation.getUser() != null
-                        && existingReservation.getUser().getId().equals(currentUser.getId())
+                        && (existingReservation.getUser() == null || (currentUser != null && existingReservation.getUser().getId().equals(currentUser.getId())))
                         && existingReservation.getStatus() == ReservationStatus.PENDING
                         && existingReservation.getExpiresAt() != null
                         && existingReservation.getExpiresAt().isAfter(now)) {
+                    if (currentUser != null && existingReservation.getUser() == null) {
+                        existingReservation.setUser(currentUser);
+                        reservationRepository.save(existingReservation);
+                        for (ShowtimeSeat ss : seats) {
+                            if (ss.getHeldByUser() == null) {
+                                ss.setHeldByUser(currentUser);
+                            }
+                        }
+                        showtimeSeatRepository.saveAll(seats);
+                    }
                     return reviewReservation(existingReservation.getId(), currentUser);
                 }
             }
@@ -153,6 +159,9 @@ public class BookingService {
 
             // Link ShowtimeSeat to Reservation without changing status (remains HELD)
             ss.setReservation(savedReservation);
+            if (currentUser != null && ss.getHeldByUser() == null) {
+                ss.setHeldByUser(currentUser);
+            }
         }
 
         reservedSeatRepository.saveAll(reservedSeats);
@@ -179,7 +188,23 @@ public class BookingService {
     }
 
     private void validateOwnership(Reservation reservation, User currentUser) {
-        if (currentUser == null || reservation.getUser() == null || !currentUser.getId().equals(reservation.getUser().getId())) {
+        if (reservation.getUser() == null) {
+            if (currentUser != null) {
+                // User logged in and claims this guest reservation
+                reservation.setUser(currentUser);
+                reservationRepository.save(reservation);
+                List<ShowtimeSeat> resSeats = showtimeSeatRepository.findByReservationId(reservation.getId());
+                for (ShowtimeSeat ss : resSeats) {
+                    if (ss.getHeldByUser() == null) {
+                        ss.setHeldByUser(currentUser);
+                    }
+                }
+                showtimeSeatRepository.saveAll(resSeats);
+            }
+            return;
+        }
+
+        if (currentUser == null || !currentUser.getId().equals(reservation.getUser().getId())) {
             throw new SeatHoldOwnershipException("Bạn không có quyền thao tác trên đơn hàng của người dùng khác.");
         }
     }

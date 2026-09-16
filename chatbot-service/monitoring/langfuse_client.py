@@ -7,6 +7,8 @@ logger = logging.getLogger("chatbot.monitoring.langfuse")
 class DummySpan:
     def span(self, *args, **kwargs):
         return self
+    def event(self, *args, **kwargs):
+        return self
     def update(self, *args, **kwargs):
         pass
     def end(self, *args, **kwargs):
@@ -41,6 +43,23 @@ class TraceWrapper:
                 return TraceWrapper(child)
             except Exception as e:
                 logger.debug(f"Error starting generation observation: {e}")
+    def event(self, name: str, input: Any = None, output: Any = None, metadata: Dict[str, Any] = None, **kwargs):
+        if self._raw and hasattr(self._raw, "start_observation"):
+            try:
+                evt = self._raw.start_observation(
+                    name=name,
+                    as_type="event",
+                    input=input,
+                    metadata=metadata,
+                    **kwargs
+                )
+                if hasattr(evt, "update") and output is not None:
+                    evt.update(output=output)
+                if hasattr(evt, "end"):
+                    evt.end()
+                return TraceWrapper(evt)
+            except Exception as e:
+                logger.debug(f"Error creating event observation: {e}")
         return DummySpan()
 
     def update(self, **kwargs):

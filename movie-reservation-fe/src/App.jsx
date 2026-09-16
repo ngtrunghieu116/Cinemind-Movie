@@ -53,6 +53,9 @@ function App() {
             <Route path={ROUTES.ARTICLE_DETAIL} element={<ArticleDetail />} />
             <Route path={ROUTES.PAYMENT_RESULT} element={<PaymentStatusDetail />} />
 
+            <Route path={ROUTES.BOOKING} element={<Booking />} />
+            <Route path={ROUTES.PAYMENT} element={<Payment />} />
+
             {/* Guest Only Routes */}
             <Route element={<GuestRoute />}>
               <Route path={ROUTES.LOGIN} element={<Login />} />
@@ -65,8 +68,6 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path={ROUTES.PROFILE} element={<Profile />} />
               <Route path={ROUTES.MY_BOOKINGS} element={<MyBookings />} />
-              <Route path={ROUTES.BOOKING} element={<Booking />} />
-              <Route path={ROUTES.PAYMENT} element={<Payment />} />
               <Route path={ROUTES.PAYMENT_STATUS} element={<PaymentStatusDetail />} />
             </Route>
 

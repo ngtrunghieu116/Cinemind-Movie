@@ -1,6 +1,7 @@
 package com.moviebooking.dto.res;
 
 import com.moviebooking.model.Showtime;
+import com.moviebooking.model.enums.ShowtimeStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -32,6 +33,8 @@ public class PublicShowtimeResponse {
     private BigDecimal priceVip;
     private BigDecimal priceCouple;
 
+    private String status;
+
     public static PublicShowtimeResponse fromEntity(Showtime showtime) {
         return PublicShowtimeResponse.builder()
                 .id(showtime.getId())
@@ -49,6 +52,11 @@ public class PublicShowtimeResponse {
                 .priceStandard(showtime.getPriceStandard())
                 .priceVip(showtime.getPriceVip())
                 .priceCouple(showtime.getPriceCouple())
+                .status(ShowtimeStatus.resolve(
+                        showtime.getStartTime(),
+                        showtime.getEffectiveEndTime(),
+                        LocalDateTime.now()
+                ).name())
                 .build();
     }
 }

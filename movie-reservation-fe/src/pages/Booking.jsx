@@ -201,9 +201,14 @@ export const Booking = () => {
                         <AlertCircle className="w-12 h-12 text-[#E50914]" />
                         <h3 className="text-lg font-bold text-[#F8FAFC]">Không thể tải sơ đồ ghế</h3>
                         <p className="text-sm text-[#94A3B8] max-w-md">{error || 'Suất chiếu không tồn tại hoặc đã bị dừng bán trực tuyến.'}</p>
-                        <Button variant="primary" onClick={() => refetch(false)}>
-                            Thử lại
-                        </Button>
+                        <div className="flex items-center gap-3 mt-2">
+                            <Button variant="outline" onClick={() => navigate(ROUTES.MOVIES)}>
+                                Xem phim khác
+                            </Button>
+                            <Button variant="primary" onClick={() => refetch(false)}>
+                                Thử lại
+                            </Button>
+                        </div>
                     </div>
                 )}
 

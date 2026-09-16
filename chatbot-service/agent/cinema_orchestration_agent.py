@@ -136,7 +136,8 @@ class CinemaChatbotCoordinator:
             user_message=message,
             chat_history=history,
             context_prompt=context_prompt,
-            user_context=user_context
+            user_context=user_context,
+            parent_span=agent_span
         )
 
         agent_span.end(output=agent_result)
