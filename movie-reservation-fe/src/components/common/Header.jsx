@@ -29,7 +29,6 @@ const Header = () => {
   const navLinks = [
     { path: ROUTES.HOME, label: 'Trang chủ' },
     { path: ROUTES.MOVIES, label: 'Lịch chiếu' },
-    { path: ROUTES.THEATERS, label: 'Cơ sở' },
     { path: ROUTES.TICKET_PRICES, label: 'Giá vé' },
     { path: ROUTES.ARTICLES, label: 'Tin tức' },
     { path: ROUTES.ABOUT, label: 'Giới thiệu' },

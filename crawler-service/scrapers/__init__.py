@@ -6,6 +6,7 @@ from scrapers.moveek_news_scraper import MoveekNewsScraper
 from scrapers.tmdb_review_scraper import TmdbReviewScraper
 from scrapers.moveek_review_scraper import MoveekReviewScraper
 from scrapers.ncc_showtime_scraper import NccShowtimeScraper
+from scrapers.ncc_banner_scraper import NccBannerScraper
 
 __all__ = [
     "NccMovieScraper",
@@ -15,4 +16,5 @@ __all__ = [
     "TmdbReviewScraper",
     "MoveekReviewScraper",
     "NccShowtimeScraper",
+    "NccBannerScraper",
 ]

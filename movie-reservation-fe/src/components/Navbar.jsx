@@ -30,7 +30,6 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-8 text-sm font-semibold">
             <Link to="/" className="text-slate-700 hover:text-red-600 transition">Trang chủ</Link>
             <Link to="/movies" className="text-slate-700 hover:text-red-600 transition">Phim đang chiếu</Link>
-            <Link to="/cinemas" className="text-slate-700 hover:text-red-600 transition">Rạp chiếu</Link>
           </div>
 
           {/* User Section */}

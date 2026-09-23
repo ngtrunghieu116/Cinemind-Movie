@@ -22,10 +22,12 @@ const Home = () => {
         refetch: refetchComingSoon 
     } = useComingSoon({ size: 10 });
 
-    // 2. memo
+    // 2. memo: Ưu tiên các phim có banner ngang cào từ NCC để hiển thị hero slider
     const heroMovies = useMemo(() => {
         if (!nowShowingMovies || nowShowingMovies.length === 0) return [];
-        return nowShowingMovies.slice(0, 8);
+        const withBanner = nowShowingMovies.filter(m => m.banner && m.banner !== m.poster);
+        const withoutBanner = nowShowingMovies.filter(m => !m.banner || m.banner === m.poster);
+        return [...withBanner, ...withoutBanner].slice(0, 8);
     }, [nowShowingMovies]);
 
     const {

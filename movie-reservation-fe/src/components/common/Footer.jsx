@@ -29,7 +29,6 @@ const Footer = () => {
             <ul className="space-y-2">
               <li><Link to={ROUTES.HOME} className="hover:text-white transition-colors">Trang chủ</Link></li>
               <li><Link to={ROUTES.MOVIES} className="hover:text-white transition-colors">Phim chiếu</Link></li>
-              <li><Link to={ROUTES.THEATERS} className="hover:text-white transition-colors">Cơ sở rạp</Link></li>
               <li><Link to={ROUTES.TICKET_PRICES} className="hover:text-white transition-colors">Giá vé</Link></li>
               <li><Link to={ROUTES.ABOUT} className="hover:text-white transition-colors">Giới thiệu</Link></li>
               <li><Link to={ROUTES.FOOD_PREVIEW} className="hover:text-white transition-colors">Bắp & Nước F&B</Link></li>

@@ -2,7 +2,7 @@ import { movieFormatter } from './movieFormatter';
 import posterPlaceholder from '../assets/images/poster-placeholder.svg';
 
 const getFullImageUrl = (path) => {
-    if (!path || path.includes('default-poster.jpg') || path.includes('no-poster')) return posterPlaceholder;
+    if (!path || path.includes('default-poster.jpg') || path.includes('no-poster') || path.endsWith('/Content/Image/banner.jpg')) return null;
     if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) {
         return path;
     }
@@ -23,8 +23,8 @@ export const movieMapper = {
         
         const rawPoster = response.posterPath || response.posterUrl || response.poster;
         const rawBanner = response.bannerPath || response.bannerUrl || response.banner;
-        const poster = getFullImageUrl(rawPoster);
-        const banner = rawBanner ? getFullImageUrl(rawBanner) : poster;
+        const poster = getFullImageUrl(rawPoster) || posterPlaceholder;
+        const banner = getFullImageUrl(rawBanner) || poster;
         
         return {
             id: response.id,

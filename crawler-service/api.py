@@ -7,12 +7,20 @@ from pydantic import BaseModel
 
 from main import (
     crawl_movies,
+    crawl_banners,
     backfill_movie_genres,
     crawl_past_movies,
     crawl_articles,
     crawl_reviews,
     crawl_showtimes
 )
+from pipelines.banner_pipeline import BannerPipeline
+
+class ManualBannerRequest(BaseModel):
+    banner_url: str
+    movie_id: int = None
+    movie_title: str = None
+    ncc_url: str = None
 
 logging.basicConfig(
     level=logging.INFO,
@@ -141,6 +149,29 @@ def trigger_past_movies(background_tasks: BackgroundTasks):
     background_tasks.add_task(run_job, "past-movies", crawl_past_movies)
     return {"status": "TRIGGERED", "task": "past-movies", "message": "Crawl past movies from Moveek started in background"}
 
+@app.post("/api/crawler/banners")
+def trigger_banners(background_tasks: BackgroundTasks):
+    if crawler_state["is_running"]:
+        raise HTTPException(status_code=409, detail=f"Crawler is currently busy running: {crawler_state['current_task']}")
+    
+    background_tasks.add_task(run_job, "banners", crawl_banners)
+    return {"status": "TRIGGERED", "task": "banners", "message": "Crawl and match hero banners from NCC started in background"}
+
+@app.post("/api/crawler/banners/manual")
+def assign_manual_banner(req: ManualBannerRequest):
+    pipeline = BannerPipeline()
+    res = pipeline.assign_banner_manually(
+        banner_url=req.banner_url,
+        movie_id=req.movie_id,
+        movie_title=req.movie_title,
+        ncc_url=req.ncc_url
+    )
+    if res.get("status") == "ERROR":
+        raise HTTPException(status_code=400, detail=res.get("message"))
+    if res.get("status") == "NOT_FOUND":
+        raise HTTPException(status_code=404, detail=res.get("message"))
+    return res
+
 @app.post("/api/crawler/all")
 def trigger_all(background_tasks: BackgroundTasks):
     if crawler_state["is_running"]:
@@ -148,6 +179,7 @@ def trigger_all(background_tasks: BackgroundTasks):
     
     def job():
         crawl_movies()
+        crawl_banners()
         crawl_past_movies()
         backfill_movie_genres()
         crawl_articles()
@@ -155,7 +187,7 @@ def trigger_all(background_tasks: BackgroundTasks):
         crawl_showtimes()
 
     background_tasks.add_task(run_job, "all", job)
-    return {"status": "TRIGGERED", "task": "all", "message": "Full crawl cycle (NCC movies, upcoming, past movies, genres & age ratings, articles, reviews, showtimes & seats) started in background"}
+    return {"status": "TRIGGERED", "task": "all", "message": "Full crawl cycle (NCC movies, banners, upcoming, past movies, genres & age ratings, articles, reviews, showtimes & seats) started in background"}
 
 if __name__ == "__main__":
     import uvicorn

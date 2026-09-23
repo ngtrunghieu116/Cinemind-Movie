@@ -124,6 +124,12 @@ Cào danh sách phim đang chiếu và phim sắp chiếu(tự động gán tr�
 python main.py --movies
 ```
 
+### 4.3. Cào & nhận diện Banner trang chủ NCC (Banners)
+Cào toàn bộ hero banner từ trang chủ NCC, tự động nhận diện bộ phim tương ứng (theo mã phim NCC hoặc thuật toán so khớp tên phim thông minh) và cập nhật cột `banner_path` trong bảng `movies`:
+```bash
+python main.py --banners
+```
+
 ### 4.4. Chuẩn hóa & liên kết loại phim (Genres)
 Tự động quét toàn bộ phim trong cơ sở dữ liệu, phân tích thể loại và lưu vào bảng `movie_genres`:
 ```bash
@@ -199,10 +205,12 @@ Dịch vụ sẽ khởi động tại: **`http://localhost:8002`** (Swagger Docs
 | `GET` | `/api/crawler/status` | Xem tiến trình đang chạy và kết quả lần cào gần nhất | Synchronous |
 | `POST` | `/api/crawler/showtimes` | Kích hoạt cào suất chiếu từ NCC & sinh ghế | Synchronous (trả kết quả ngay) |
 | `POST` | `/api/crawler/movies` | Kích hoạt cào phim đang chiếu, sắp chiếu, phim cũ & thể loại | Background Task |
+| `POST` | `/api/crawler/banners` | Kích hoạt cào banner trang chủ NCC & tự động gắn vào phim | Background Task |
+| `POST` | `/api/crawler/banners/manual` | Gắn banner thủ công theo URL và tên phim / ID phim | Synchronous |
 | `POST` | `/api/crawler/genres` | Chuẩn hóa và liên kết thể loại phim vào database | Background Task |
 | `POST` | `/api/crawler/articles` | Kích hoạt cào tin tức điện ảnh từ NCC & Moveek | Background Task |
 | `POST` | `/api/crawler/reviews` | Kích hoạt cào đánh giá (hỗ trợ `?movie_id=X`) | Background Task |
-| `POST` | `/api/crawler/all` | Kích hoạt chu trình cào toàn bộ dữ liệu (tất cả các bước) | Background Task |
+| `POST` | `/api/crawler/all` | Kích hoạt chu trình cào toàn bộ (bao gồm cả cập nhật banner) | Background Task |
 
 
 ### 6.3. Ví dụ gọi API bằng cURL / PowerShell

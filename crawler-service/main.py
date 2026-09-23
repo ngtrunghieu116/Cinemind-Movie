@@ -16,6 +16,8 @@ from pipelines.article_pipeline import ArticlePipeline
 from pipelines.review_pipeline import ReviewPipeline
 from scrapers.ncc_showtime_scraper import NccShowtimeScraper
 from pipelines.showtime_pipeline import ShowtimePipeline
+from scrapers.ncc_banner_scraper import NccBannerScraper
+from pipelines.banner_pipeline import BannerPipeline
 
 # Force UTF-8 output on Windows terminal
 if hasattr(sys.stdout, "reconfigure"):
@@ -220,10 +222,29 @@ def crawl_showtimes():
         logger.error(f"Error crawling showtimes: {e}")
         return {"inserted": 0, "updated": 0, "skipped": 0, "total": 0}
 
+def crawl_banners():
+    logger.info("==================================================")
+    logger.info(">>> 1D. CRAWLING HOMEPAGE BANNERS & MATCHING MOVIES FROM NCC")
+    logger.info("==================================================")
+    try:
+        banner_scraper = NccBannerScraper()
+        banners = banner_scraper.fetch_homepage_banners()
+        pipeline = BannerPipeline()
+        stats = pipeline.process_and_save(banners)
+        logger.info(
+            f">>> BANNERS CRAWL FINISHED: {stats.get('updated', 0)} movies updated with new banners, "
+            f"{stats.get('skipped', 0)} unchanged out of {stats.get('total_banners', 0)} total banners.\n"
+        )
+        return stats
+    except Exception as e:
+        logger.error(f"Error crawling banners: {e}", exc_info=True)
+        return {"total_banners": 0, "matched": 0, "updated": 0, "skipped": 0, "error": str(e)}
+
 def main():
     parser = argparse.ArgumentParser(description="CineMind Python Crawler Service")
-    parser.add_argument("--all", action="store_true", help="Crawl all: movies (now showing & upcoming), past movies, genres & age ratings, articles, reviews, showtimes & seats")
-    parser.add_argument("--movies", action="store_true", help="Crawl now showing and upcoming movies, banners, and link genres from NCC")
+    parser.add_argument("--all", action="store_true", help="Crawl all: movies, banners, past movies, genres, articles, reviews, showtimes")
+    parser.add_argument("--movies", action="store_true", help="Crawl now showing and upcoming movies from NCC")
+    parser.add_argument("--banners", action="store_true", help="Crawl homepage hero banners and match to movies from NCC")
     parser.add_argument("--genres", action="store_true", help="Classify and link genres and age_rating for all movies")
     parser.add_argument("--past-movies", action="store_true", help="Crawl past (ended) movies from Moveek")
     parser.add_argument("--news", "--articles", action="store_true", help="Crawl articles and news from NCC and Moveek")
@@ -238,9 +259,10 @@ def main():
         success = test_connection()
         sys.exit(0 if success else 1)
 
-    if not any([args.all, args.movies, args.past_movies, args.news, args.reviews, args.showtimes, args.genres, args.movie_id]):
+    if not any([args.all, args.movies, args.banners, args.past_movies, args.news, args.reviews, args.showtimes, args.genres, args.movie_id]):
         # Default behavior: run all steps sequentially!
         crawl_movies()
+        crawl_banners()
         crawl_past_movies()
         backfill_movie_genres()
         crawl_articles()
@@ -249,6 +271,8 @@ def main():
     else:
         if args.movies or args.all:
             crawl_movies()
+        if args.banners or args.all:
+            crawl_banners()
         if args.past_movies or args.all:
             crawl_past_movies()
         if args.genres or (args.all and not args.movies):
