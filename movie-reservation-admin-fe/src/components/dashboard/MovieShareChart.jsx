@@ -53,8 +53,7 @@ const MovieShareChart = ({ data = [], loading = false }) => {
     return (
         <div className="chart-card">
             <div className="chart-card__header">
-                <h3 className="chart-card__title">Tỷ lệ Doanh thu theo Phim</h3>
-                <p className="chart-card__sub">Top 10 phim trong khoảng thời gian đã chọn</p>
+                <h3 className="chart-card__title">Top 10 phim bán chạy theo doanh thu</h3>
             </div>
 
             {loading ? (

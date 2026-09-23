@@ -195,7 +195,7 @@ const ChatWidget = () => {
             console.error('Chat error:', error);
             const errorMsg = {
                 role: 'assistant',
-                content: 'Dạ, hiện tại dịch vụ chatbot đang khởi động hoặc tạm thời chưa kết nối được server (cổng 8001). Bạn vui lòng thử lại sau giây lát nhé.',
+                content: 'Dạ, hiện tại dịch vụ chatbot đang bảo trì. Anh/chị vui lòng thử lại sau!',
                 agent_name: 'safe_guard'
             };
             setMessages((prev) => [...prev, errorMsg]);

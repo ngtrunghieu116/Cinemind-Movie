@@ -50,16 +50,16 @@ const Dashboard = () => {
     const [toDate, setToDate] = useState(today());
     const [preset, setPreset] = useState(30);
 
-    const [overview, setOverview]             = useState(null);
-    const [dailyData, setDailyData]           = useState([]);
-    const [movieShare, setMovieShare]         = useState([]);
-    const [topMovies, setTopMovies]           = useState([]);
-    const [roomPerf, setRoomPerf]             = useState([]);
+    const [overview, setOverview] = useState(null);
+    const [dailyData, setDailyData] = useState([]);
+    const [movieShare, setMovieShare] = useState([]);
+    const [topMovies, setTopMovies] = useState([]);
+    const [roomPerf, setRoomPerf] = useState([]);
 
-    const [loadingOverview, setLoadingOverview]   = useState(false);
-    const [loadingDaily, setLoadingDaily]         = useState(false);
-    const [loadingMovies, setLoadingMovies]       = useState(false);
-    const [loadingRooms, setLoadingRooms]         = useState(false);
+    const [loadingOverview, setLoadingOverview] = useState(false);
+    const [loadingDaily, setLoadingDaily] = useState(false);
+    const [loadingMovies, setLoadingMovies] = useState(false);
+    const [loadingRooms, setLoadingRooms] = useState(false);
 
     const [error, setError] = useState(null);
 
@@ -92,10 +92,10 @@ const Dashboard = () => {
                 statisticsApi.getRoomPerformance(fromDate, toDate),
             ]);
 
-            if (daily.status === 'fulfilled')  setDailyData(daily.value   ?? []);
-            if (share.status === 'fulfilled')  setMovieShare(share.value  ?? []);
-            if (top.status === 'fulfilled')    setTopMovies(top.value     ?? []);
-            if (rooms.status === 'fulfilled')  setRoomPerf(rooms.value    ?? []);
+            if (daily.status === 'fulfilled') setDailyData(daily.value ?? []);
+            if (share.status === 'fulfilled') setMovieShare(share.value ?? []);
+            if (top.status === 'fulfilled') setTopMovies(top.value ?? []);
+            if (rooms.status === 'fulfilled') setRoomPerf(rooms.value ?? []);
         } catch (e) {
             console.error('Range data fetch failed:', e);
             setError('Không thể tải dữ liệu biểu đồ.');
@@ -146,8 +146,8 @@ const Dashboard = () => {
             {/* ── Page Header ─────────────────────────────── */}
             <div className="dashboard__header">
                 <div>
-                    <h1 className="dashboard__title">Thống kê &amp; Phân tích</h1>
-                    <p className="dashboard__desc">Tổng quan hoạt động kinh doanh CineMind</p>
+                    <h1 className="dashboard__title">Báo cáo &amp; Thống kê</h1>
+
                 </div>
 
                 {/* Day picker for KPI */}
@@ -240,13 +240,13 @@ const Dashboard = () => {
             {/* ── Charts Row ───────────────────────────────── */}
             <div className="dashboard__charts-grid">
                 <RevenueTicketChart data={dailyData} loading={loadingDaily} />
-                <MovieShareChart    data={movieShare} loading={loadingMovies} />
+                <MovieShareChart data={movieShare} loading={loadingMovies} />
             </div>
 
             {/* ── Tables Row ───────────────────────────────── */}
             <div className="dashboard__tables-grid">
-                <TopMoviesTable      data={topMovies} loading={loadingMovies} />
-                <RoomPerformanceTable data={roomPerf}  loading={loadingRooms} />
+                <TopMoviesTable data={topMovies} loading={loadingMovies} />
+                <RoomPerformanceTable data={roomPerf} loading={loadingRooms} />
             </div>
         </div>
     );

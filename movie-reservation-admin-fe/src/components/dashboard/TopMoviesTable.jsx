@@ -25,7 +25,7 @@ const TopMoviesTable = ({ data = [], loading = false }) => {
                     <table className="stat-table">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>STT</th>
                                 <th>Tên Phim</th>
                                 <th className="text-right">Vé Bán</th>
                                 <th className="text-right">Đặt Vé</th>
